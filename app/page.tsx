@@ -40,7 +40,7 @@ const socials = [
   },
   {
     label: "ResearchGate",
-    href: "#", // TODO: your ResearchGate profile URL
+    href: "https://www.researchgate.net/profile/Abinael-Lumempouw",
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5" aria-hidden>
         <path d="M19.586 0H4.414A4.414 4.414 0 000 4.414v15.172A4.414 4.414 0 004.414 24h15.172A4.414 4.414 0 0024 19.586V4.414A4.414 4.414 0 0019.586 0zM9.5 16.5H7.75V9.25H9.5v7.25zm-.875-8.313a1.063 1.063 0 110-2.125 1.063 1.063 0 010 2.125zM18.5 16.5h-1.625l-2.063-3.438L12.75 16.5H11.25l2.625-4.125L11.5 9.25h1.625l1.875 3.063 1.875-3.063H18.5l-2.375 3.125L18.5 16.5z" />
