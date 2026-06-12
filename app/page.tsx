@@ -96,18 +96,18 @@ const projects = [
 
 // ── Theme toggle ──────────────────────────────────────────────────────────────
 function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   if (!mounted) return <div className="w-8 h-8" />;
 
   return (
     <button
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
       aria-label="Toggle dark mode"
       className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
     >
-      {theme === "dark" ? (
+      {resolvedTheme === "dark" ? (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
           <circle cx="12" cy="12" r="4" />
           <path strokeLinecap="round" d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />

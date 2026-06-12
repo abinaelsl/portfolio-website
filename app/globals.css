@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Use class-based dark mode so next-themes can control it */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --font-sans: var(--font-geist-sans);
 }
