@@ -1,4 +1,7 @@
-import Link from "next/link";
+"use client";
+import Image from "next/image";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 // ── Social links ─────────────────────────────────────────────────────────────
 const socials = [
@@ -43,7 +46,7 @@ const socials = [
     href: "https://www.researchgate.net/profile/Abinael-Lumempouw",
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5" aria-hidden>
-        <path d="M19.586 0H4.414A4.414 4.414 0 000 4.414v15.172A4.414 4.414 0 004.414 24h15.172A4.414 4.414 0 0024 19.586V4.414A4.414 4.414 0 0019.586 0zM9.5 16.5H7.75V9.25H9.5v7.25zm-.875-8.313a1.063 1.063 0 110-2.125 1.063 1.063 0 010 2.125zM18.5 16.5h-1.625l-2.063-3.438L12.75 16.5H11.25l2.625-4.125L11.5 9.25h1.625l1.875 3.063 1.875-3.063H18.5l-2.375 3.125L18.5 16.5z" />
+        <path d="M19.586 0H4.414A4.414 4.414 0 0 0 0 4.414v15.172A4.414 4.414 0 0 0 4.414 24h15.172A4.414 4.414 0 0 0 24 19.586V4.414A4.414 4.414 0 0 0 19.586 0zM9.748 16.27H7.894V9.255h1.854v7.016zm-.927-7.977a1.074 1.074 0 1 1 0-2.147 1.074 1.074 0 0 1 0 2.147zm8.43 7.977h-1.698l-1.915-3.186-1.913 3.186H10.03l2.684-4.012-2.428-3.004h1.699l1.657 2.768 1.656-2.768h1.7l-2.428 3.004 2.686 4.012z" />
       </svg>
     ),
   },
@@ -58,7 +61,7 @@ const socials = [
   },
   {
     label: "Email",
-    href: "mailto:abinaelgame@gmail.com",
+    href: "mailto:abinaelad@gmail.com",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="w-5 h-5" aria-hidden>
         <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
@@ -72,7 +75,7 @@ const papers = [
   {
     title: "Toward Net Zero: Thermal Performance Analysis of Type 36 Social Housing",
     authors: "Abinael Sarungallo Lumempouw",
-    venue: "ResearchGate · 2023",
+    venue: "ResearchGate · 2026",
     href: "https://www.researchgate.net/publication/406981225_Abinael_Type_36_House_Paper_Final",
     tags: ["Net Zero", "Building Energy", "Housing"],
   },
@@ -88,24 +91,53 @@ const projects = [
       "StatusMaxx helps users discover credit card promotions matched to their wallet. Built with Expo/React Native (iOS & Android), a Python pipeline for daily promo extraction, and Supabase as the backend.",
     href: "#", // TODO: add StatusMaxx landing page or App Store link
     tags: ["React Native", "Expo", "Supabase", "Japan"],
-    accent: "indigo",
   },
 ];
+
+// ── Theme toggle ──────────────────────────────────────────────────────────────
+function ThemeToggle() {
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return <div className="w-8 h-8" />;
+
+  return (
+    <button
+      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      aria-label="Toggle dark mode"
+      className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+    >
+      {theme === "dark" ? (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
+          <circle cx="12" cy="12" r="4" />
+          <path strokeLinecap="round" d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+        </svg>
+      ) : (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+      )}
+    </button>
+  );
+}
 
 // ── Nav ───────────────────────────────────────────────────────────────────────
 function Nav() {
   return (
-    <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-100">
+    <header className="sticky top-0 z-50 bg-white/90 dark:bg-gray-950/90 backdrop-blur-sm border-b border-gray-100 dark:border-gray-800">
       <div className="max-w-3xl mx-auto px-6 h-14 flex items-center justify-between">
-        <span className="font-semibold text-sm tracking-tight text-gray-900">
+        <span className="font-semibold text-sm tracking-tight text-gray-900 dark:text-gray-100">
           Abinael S.L.
         </span>
-        <nav className="flex items-center gap-6 text-sm text-gray-600">
-          <a href="#about" className="hover:text-indigo-600 transition-colors">About</a>
-          <a href="#research" className="hover:text-indigo-600 transition-colors">Research</a>
-          <a href="#projects" className="hover:text-indigo-600 transition-colors">Projects</a>
-          <a href="#contact" className="hover:text-indigo-600 transition-colors">Contact</a>
-        </nav>
+        <div className="flex items-center gap-5">
+          <nav className="flex items-center gap-5 text-sm text-gray-600 dark:text-gray-400">
+            <a href="#about" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">About</a>
+            <a href="#research" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Research</a>
+            <a href="#projects" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Projects</a>
+            <a href="#contact" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Contact</a>
+          </nav>
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );
@@ -116,21 +148,27 @@ function Hero() {
   return (
     <section className="max-w-3xl mx-auto px-6 pt-20 pb-16">
       <div className="flex flex-col sm:flex-row sm:items-start gap-8">
-        {/* Avatar placeholder — replace src with your photo in /public/avatar.jpg */}
-        <div className="shrink-0 w-24 h-24 rounded-full bg-indigo-100 border-2 border-indigo-200 flex items-center justify-center text-indigo-500 text-3xl font-bold select-none">
-          A
+        {/* Profile photo — drop your photo at /public/avatar.jpg to replace the placeholder */}
+        <div className="shrink-0 w-24 h-24 rounded-full overflow-hidden bg-indigo-100 dark:bg-indigo-900 border-2 border-indigo-200 dark:border-indigo-700 flex items-center justify-center">
+          <Image
+            src="/avatar.jpg"
+            alt="Abinael Sarungallo Lumempouw"
+            width={96}
+            height={96}
+            className="object-cover w-full h-full"
+            onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+          />
         </div>
         <div className="flex-1">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900 leading-tight">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100 leading-tight">
             Abinael Sarungallo Lumempouw
           </h1>
-          <p className="mt-2 text-base text-gray-600 leading-relaxed">
-            Student at <span className="text-gray-900 font-medium">Kyushu University</span> ·{" "}
-            Founder at <span className="text-indigo-600 font-medium">StatusMaxx</span> ·{" "}
+          <p className="mt-2 text-base text-gray-600 dark:text-gray-400 leading-relaxed">
+            Student at <span className="text-gray-900 dark:text-gray-100 font-medium">Kyushu University</span> ·{" "}
+            Founder at <span className="text-indigo-600 dark:text-indigo-400 font-medium">StatusMaxx</span> ·{" "}
             Researching{" "}
-            <span className="text-gray-900 font-medium">Net Zero Buildings</span>
+            <span className="text-gray-900 dark:text-gray-100 font-medium">Net Zero Buildings</span>
           </p>
-          {/* Social icons */}
           <div className="mt-4 flex items-center gap-3">
             {socials.map((s) => (
               <a
@@ -139,7 +177,7 @@ function Hero() {
                 aria-label={s.label}
                 target={s.href.startsWith("mailto") ? undefined : "_blank"}
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-indigo-600 transition-colors"
+                className="text-gray-400 dark:text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
               >
                 {s.icon}
               </a>
@@ -154,20 +192,20 @@ function Hero() {
 // ── About ─────────────────────────────────────────────────────────────────────
 function About() {
   return (
-    <section id="about" className="max-w-3xl mx-auto px-6 py-12 border-t border-gray-100">
-      <h2 className="text-xs font-semibold uppercase tracking-widest text-indigo-600 mb-4">
+    <section id="about" className="max-w-3xl mx-auto px-6 py-12 border-t border-gray-100 dark:border-gray-800">
+      <h2 className="text-xs font-semibold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 mb-4">
         About
       </h2>
-      <p className="text-gray-700 leading-relaxed text-base">
+      <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-base">
         I&apos;m a graduate student at Kyushu University (Kyudai) focused on sustainable building
         design and energy systems. My research investigates pathways to net-zero carbon emissions
         in residential buildings, with a focus on affordable housing typologies.
       </p>
-      <p className="mt-4 text-gray-700 leading-relaxed text-base">
+      <p className="mt-4 text-gray-700 dark:text-gray-300 leading-relaxed text-base">
         Outside academia, I co-founded{" "}
-        <span className="text-indigo-600 font-medium">StatusMaxx</span>, a fintech app that
+        <span className="text-indigo-600 dark:text-indigo-400 font-medium">StatusMaxx</span>, a fintech app that
         surfaces the best credit-card promotions for your wallet — currently live in Japan. I also
-        create content on YouTube and TikTok around tech, startups, and university life in Japan.
+        create content on YouTube and Instagram around tech, startups, and university life in Japan.
       </p>
     </section>
   );
@@ -176,8 +214,8 @@ function About() {
 // ── Research ──────────────────────────────────────────────────────────────────
 function Research() {
   return (
-    <section id="research" className="max-w-3xl mx-auto px-6 py-12 border-t border-gray-100">
-      <h2 className="text-xs font-semibold uppercase tracking-widest text-indigo-600 mb-6">
+    <section id="research" className="max-w-3xl mx-auto px-6 py-12 border-t border-gray-100 dark:border-gray-800">
+      <h2 className="text-xs font-semibold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 mb-6">
         Research
       </h2>
       <ul className="space-y-6">
@@ -189,16 +227,16 @@ function Research() {
               rel="noopener noreferrer"
               className="group block"
             >
-              <p className="font-medium text-gray-900 group-hover:text-indigo-600 transition-colors leading-snug">
+              <p className="font-medium text-gray-900 dark:text-gray-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors leading-snug">
                 {p.title}
               </p>
-              <p className="mt-1 text-sm text-gray-500">{p.authors}</p>
-              <p className="text-sm text-gray-400">{p.venue}</p>
+              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{p.authors}</p>
+              <p className="text-sm text-gray-400 dark:text-gray-500">{p.venue}</p>
               <div className="mt-2 flex flex-wrap gap-1.5">
                 {p.tags.map((t) => (
                   <span
                     key={t}
-                    className="text-xs px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 font-medium"
+                    className="text-xs px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 font-medium"
                   >
                     {t}
                   </span>
@@ -215,38 +253,38 @@ function Research() {
 // ── Projects ──────────────────────────────────────────────────────────────────
 function Projects() {
   return (
-    <section id="projects" className="max-w-3xl mx-auto px-6 py-12 border-t border-gray-100">
-      <h2 className="text-xs font-semibold uppercase tracking-widest text-indigo-600 mb-6">
+    <section id="projects" className="max-w-3xl mx-auto px-6 py-12 border-t border-gray-100 dark:border-gray-800">
+      <h2 className="text-xs font-semibold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 mb-6">
         Projects
       </h2>
       <div className="space-y-6">
         {projects.map((p) => (
           <div
             key={p.name}
-            className="rounded-xl border border-gray-200 p-5 hover:border-indigo-300 hover:shadow-sm transition-all"
+            className="rounded-xl border border-gray-200 dark:border-gray-700 p-5 hover:border-indigo-300 dark:hover:border-indigo-600 hover:shadow-sm transition-all"
           >
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h3 className="font-semibold text-gray-900 text-lg">{p.name}</h3>
-                <p className="text-sm text-indigo-600 font-medium mt-0.5">{p.tagline}</p>
+                <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-lg">{p.name}</h3>
+                <p className="text-sm text-indigo-600 dark:text-indigo-400 font-medium mt-0.5">{p.tagline}</p>
               </div>
               {p.href !== "#" && (
                 <a
                   href={p.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="shrink-0 text-xs font-medium text-indigo-600 border border-indigo-200 rounded-full px-3 py-1 hover:bg-indigo-50 transition-colors"
+                  className="shrink-0 text-xs font-medium text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-700 rounded-full px-3 py-1 hover:bg-indigo-50 dark:hover:bg-indigo-950 transition-colors"
                 >
                   Visit ↗
                 </a>
               )}
             </div>
-            <p className="mt-3 text-sm text-gray-600 leading-relaxed">{p.description}</p>
+            <p className="mt-3 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{p.description}</p>
             <div className="mt-3 flex flex-wrap gap-1.5">
               {p.tags.map((t) => (
                 <span
                   key={t}
-                  className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 font-medium"
+                  className="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 font-medium"
                 >
                   {t}
                 </span>
@@ -267,27 +305,30 @@ function Content() {
       handle: "@abinaelsl",
       href: "https://www.youtube.com/@abinaelsl",
       description: "Videos on tech, startups, and student life in Japan.",
-      color: "bg-red-50 text-red-600 border-red-100",
+      light: "bg-red-50 text-red-600 border-red-100",
+      dark: "dark:bg-red-950/40 dark:text-red-400 dark:border-red-900",
     },
     {
       platform: "Instagram",
       handle: "@abinaelsl",
       href: "https://instagram.com/abinaelsl",
       description: "Photos and reels from Japan and everyday life.",
-      color: "bg-pink-50 text-pink-600 border-pink-100",
+      light: "bg-pink-50 text-pink-600 border-pink-100",
+      dark: "dark:bg-pink-950/40 dark:text-pink-400 dark:border-pink-900",
     },
     {
       platform: "TikTok",
-      handle: "@abinaelsl", // TODO: confirm TikTok handle
-      href: "#",            // TODO: your TikTok profile URL
+      handle: "@abinaelsl",
+      href: "#", // TODO: your TikTok profile URL
       description: "Short-form content on productivity and Japan life.",
-      color: "bg-gray-50 text-gray-800 border-gray-200",
+      light: "bg-gray-50 text-gray-800 border-gray-200",
+      dark: "dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700",
     },
   ];
 
   return (
-    <section className="max-w-3xl mx-auto px-6 py-12 border-t border-gray-100">
-      <h2 className="text-xs font-semibold uppercase tracking-widest text-indigo-600 mb-6">
+    <section className="max-w-3xl mx-auto px-6 py-12 border-t border-gray-100 dark:border-gray-800">
+      <h2 className="text-xs font-semibold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 mb-6">
         Content
       </h2>
       <div className="grid sm:grid-cols-3 gap-4">
@@ -297,7 +338,7 @@ function Content() {
             href={c.href}
             target="_blank"
             rel="noopener noreferrer"
-            className={`rounded-xl border p-4 hover:shadow-sm transition-all ${c.color}`}
+            className={`rounded-xl border p-4 hover:shadow-sm transition-all ${c.light} ${c.dark}`}
           >
             <p className="font-semibold">{c.platform}</p>
             <p className="text-sm font-mono mt-0.5 opacity-70">{c.handle}</p>
@@ -312,15 +353,15 @@ function Content() {
 // ── Footer / Contact ──────────────────────────────────────────────────────────
 function Footer() {
   return (
-    <footer id="contact" className="border-t border-gray-100 mt-auto">
+    <footer id="contact" className="border-t border-gray-100 dark:border-gray-800 mt-auto">
       <div className="max-w-3xl mx-auto px-6 py-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <p className="font-semibold text-gray-900">Abinael Sarungallo Lumempouw</p>
+          <p className="font-semibold text-gray-900 dark:text-gray-100">Abinael Sarungallo Lumempouw</p>
           <a
-            href="mailto:abinaelgame@gmail.com"
-            className="text-sm text-indigo-600 hover:underline"
+            href="mailto:abinaelad@gmail.com"
+            className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline"
           >
-            abinaelgame@gmail.com
+            abinaelad@gmail.com
           </a>
         </div>
         <div className="flex items-center gap-4">
@@ -331,7 +372,7 @@ function Footer() {
               aria-label={s.label}
               target={s.href.startsWith("mailto") ? undefined : "_blank"}
               rel="noopener noreferrer"
-              className="text-gray-400 hover:text-indigo-600 transition-colors"
+              className="text-gray-400 dark:text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
             >
               {s.icon}
             </a>
@@ -339,7 +380,7 @@ function Footer() {
         </div>
       </div>
       <div className="max-w-3xl mx-auto px-6 pb-6">
-        <p className="text-xs text-gray-400">
+        <p className="text-xs text-gray-400 dark:text-gray-600">
           © {new Date().getFullYear()} Abinael Sarungallo Lumempouw
         </p>
       </div>
