@@ -106,7 +106,7 @@ const projects = [
     tagline: "Match your payment cards to the best merchant promos — launched in Japan.",
     description:
       "StatusMaxx helps users discover credit card promotions matched to their wallet. Built with Expo/React Native (iOS & Android), a Python pipeline for daily promo extraction, and Supabase as the backend.",
-    href: "#", // TODO: add StatusMaxx landing page or App Store link
+    href: "https://statusmaxx.vercel.app",
     tags: ["React Native", "Expo", "Supabase", "Japan"],
   },
 ];
