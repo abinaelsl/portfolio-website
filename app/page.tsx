@@ -252,16 +252,24 @@ function About() {
         About
       </h2>
       <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-base">
-        I&apos;m a graduate student at Kyushu University (Kyudai) focused on sustainable building
-        design and energy systems. My research investigates pathways to net-zero carbon emissions
-        in residential buildings, with a focus on affordable housing typologies.
+        Currently a 4th-year undergraduate student at Kyushu University, where my research focuses
+        on sustainable building design and energy-efficient systems. Specifically, I investigate
+        pathways to net-zero carbon emissions in residential buildings, with an emphasis on
+        mass-market deployment through affordable housing typologies. I am supervised by{" "}
+        <span className="text-gray-900 dark:text-gray-100 font-medium">Professor Hazarika Hemanta</span>{" "}
+        and{" "}
+        <span className="text-gray-900 dark:text-gray-100 font-medium">Professor Hironobu Kan</span>,
+        and am a member of the{" "}
+        <span className="text-gray-900 dark:text-gray-100 font-medium">Geodisaster Prevention Lab</span>{" "}
+        in the Faculty of Civil Engineering at Kyushu University.
       </p>
       <p className="mt-4 text-gray-700 dark:text-gray-300 leading-relaxed text-base">
-        Outside academia, I co-founded{" "}
-        <span className="text-indigo-600 dark:text-indigo-400 font-medium">StatusMaxx</span>, a
-        fintech app that surfaces the best credit-card promotions for your wallet — currently live
-        in Japan. I also create content on YouTube and Instagram around tech, startups, and
-        university life in Japan.
+        Outside of academia, I founded{" "}
+        <span className="text-indigo-600 dark:text-indigo-400 font-medium">StatusMaxx</span> — a
+        fintech app that helps users find the best membership card to use at any given merchant,
+        with proximity-based promo discovery built in. We&apos;re currently on a roadmap to launch
+        in July 2026. I also create content on YouTube, Instagram, and TikTok covering life in
+        Japan, tech, startups, university life, and personal finance.
       </p>
     </section>
   );
