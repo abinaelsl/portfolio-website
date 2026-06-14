@@ -1,7 +1,24 @@
 "use client";
 import Image from "next/image";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+// ── Scroll reveal hook ────────────────────────────────────────────────────────
+function useInView(threshold = 0.12) {
+  const ref = useRef<HTMLElement>(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setInView(true); obs.disconnect(); } },
+      { threshold }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [threshold]);
+  return { ref, inView };
+}
 
 // ── Social links ─────────────────────────────────────────────────────────────
 const socials = [
@@ -105,7 +122,9 @@ function ThemeToggle() {
     <button
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
       aria-label="Toggle dark mode"
-      className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+      className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-500 dark:text-gray-400
+                 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-indigo-600 dark:hover:text-indigo-400
+                 transition-all duration-200 cursor-pointer hover:rotate-12"
     >
       {resolvedTheme === "dark" ? (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4">
@@ -131,10 +150,15 @@ function Nav() {
         </span>
         <div className="flex items-center gap-5">
           <nav className="flex items-center gap-5 text-sm text-gray-600 dark:text-gray-400">
-            <a href="#about" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">About</a>
-            <a href="#research" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Research</a>
-            <a href="#projects" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Projects</a>
-            <a href="#contact" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Contact</a>
+            {["about", "research", "projects", "contact"].map((id) => (
+              <a
+                key={id}
+                href={`#${id}`}
+                className="nav-link relative capitalize hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors duration-200 cursor-pointer"
+              >
+                {id}
+              </a>
+            ))}
           </nav>
           <ThemeToggle />
         </div>
@@ -148,28 +172,52 @@ function Hero() {
   return (
     <section className="max-w-3xl mx-auto px-6 pt-20 pb-16">
       <div className="flex flex-col sm:flex-row sm:items-start gap-8">
-        {/* Profile photo — drop your photo at /public/avatar.jpg to replace the placeholder */}
-        <div className="shrink-0 w-24 h-24 rounded-full overflow-hidden bg-indigo-100 dark:bg-indigo-900 border-2 border-indigo-200 dark:border-indigo-700 flex items-center justify-center">
+        {/* Avatar — scale-in entrance */}
+        <div
+          className="animate-scale-in shrink-0 w-24 h-24 rounded-full overflow-hidden
+                     bg-indigo-100 dark:bg-indigo-900
+                     border-2 border-indigo-200 dark:border-indigo-700
+                     ring-4 ring-transparent hover:ring-indigo-200 dark:hover:ring-indigo-800
+                     transition-all duration-300 cursor-default"
+        >
           <Image
             src="/avatar.jpg"
             alt="Abinael Sarungallo Lumempouw"
             width={96}
             height={96}
             className="object-cover w-full h-full"
+            priority
             onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
           />
         </div>
+
         <div className="flex-1">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100 leading-tight">
+          {/* Staggered text entrance */}
+          <h1
+            className="animate-fade-in-up text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100 leading-tight"
+            style={{ animationDelay: "80ms" }}
+          >
             Abinael Sarungallo Lumempouw
           </h1>
-          <p className="mt-2 text-base text-gray-600 dark:text-gray-400 leading-relaxed">
-            Student at <span className="text-gray-900 dark:text-gray-100 font-medium">Kyushu University</span> ·{" "}
-            Founder at <span className="text-indigo-600 dark:text-indigo-400 font-medium">StatusMaxx</span> ·{" "}
+          <p
+            className="animate-fade-in-up mt-2 text-base text-gray-600 dark:text-gray-400 leading-relaxed"
+            style={{ animationDelay: "160ms" }}
+          >
+            Student at{" "}
+            <span className="text-gray-900 dark:text-gray-100 font-medium">Kyushu University</span>{" "}
+            ·{" "}
+            Founder at{" "}
+            <span className="text-indigo-600 dark:text-indigo-400 font-medium">StatusMaxx</span>{" "}
+            ·{" "}
             Researching{" "}
             <span className="text-gray-900 dark:text-gray-100 font-medium">Net Zero Buildings</span>
           </p>
-          <div className="mt-4 flex items-center gap-3">
+
+          {/* Social icons — staggered */}
+          <div
+            className="animate-fade-in-up mt-4 flex items-center gap-3"
+            style={{ animationDelay: "240ms" }}
+          >
             {socials.map((s) => (
               <a
                 key={s.label}
@@ -177,7 +225,9 @@ function Hero() {
                 aria-label={s.label}
                 target={s.href.startsWith("mailto") ? undefined : "_blank"}
                 rel="noopener noreferrer"
-                className="text-gray-400 dark:text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                className="text-gray-400 dark:text-gray-500
+                           hover:text-indigo-600 dark:hover:text-indigo-400
+                           hover:scale-115 transition-all duration-150 cursor-pointer"
               >
                 {s.icon}
               </a>
@@ -191,8 +241,13 @@ function Hero() {
 
 // ── About ─────────────────────────────────────────────────────────────────────
 function About() {
+  const { ref, inView } = useInView();
   return (
-    <section id="about" className="max-w-3xl mx-auto px-6 py-12 border-t border-gray-100 dark:border-gray-800">
+    <section
+      id="about"
+      ref={ref}
+      className={`reveal ${inView ? "in-view" : ""} max-w-3xl mx-auto px-6 py-12 border-t border-gray-100 dark:border-gray-800`}
+    >
       <h2 className="text-xs font-semibold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 mb-4">
         About
       </h2>
@@ -203,9 +258,10 @@ function About() {
       </p>
       <p className="mt-4 text-gray-700 dark:text-gray-300 leading-relaxed text-base">
         Outside academia, I co-founded{" "}
-        <span className="text-indigo-600 dark:text-indigo-400 font-medium">StatusMaxx</span>, a fintech app that
-        surfaces the best credit-card promotions for your wallet — currently live in Japan. I also
-        create content on YouTube and Instagram around tech, startups, and university life in Japan.
+        <span className="text-indigo-600 dark:text-indigo-400 font-medium">StatusMaxx</span>, a
+        fintech app that surfaces the best credit-card promotions for your wallet — currently live
+        in Japan. I also create content on YouTube and Instagram around tech, startups, and
+        university life in Japan.
       </p>
     </section>
   );
@@ -213,21 +269,32 @@ function About() {
 
 // ── Research ──────────────────────────────────────────────────────────────────
 function Research() {
+  const { ref, inView } = useInView();
   return (
-    <section id="research" className="max-w-3xl mx-auto px-6 py-12 border-t border-gray-100 dark:border-gray-800">
+    <section
+      id="research"
+      ref={ref}
+      className={`reveal ${inView ? "in-view" : ""} max-w-3xl mx-auto px-6 py-12 border-t border-gray-100 dark:border-gray-800`}
+    >
       <h2 className="text-xs font-semibold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 mb-6">
         Research
       </h2>
       <ul className="space-y-6">
-        {papers.map((p) => (
-          <li key={p.title}>
+        {papers.map((p, i) => (
+          <li
+            key={p.title}
+            className="reveal in-view"
+            style={{ transitionDelay: `${i * 80}ms` }}
+          >
             <a
               href={p.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="group block"
+              className="group block pl-4 border-l-2 border-transparent
+                         hover:border-indigo-400 dark:hover:border-indigo-500
+                         transition-all duration-250 cursor-pointer"
             >
-              <p className="font-medium text-gray-900 dark:text-gray-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors leading-snug">
+              <p className="font-medium text-gray-900 dark:text-gray-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-200 leading-snug">
                 {p.title}
               </p>
               <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{p.authors}</p>
@@ -236,7 +303,11 @@ function Research() {
                 {p.tags.map((t) => (
                   <span
                     key={t}
-                    className="text-xs px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 font-medium"
+                    className="text-xs px-2 py-0.5 rounded-full
+                               bg-indigo-50 dark:bg-indigo-950
+                               text-indigo-600 dark:text-indigo-400
+                               font-medium transition-colors duration-150
+                               group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900"
                   >
                     {t}
                   </span>
@@ -252,16 +323,25 @@ function Research() {
 
 // ── Projects ──────────────────────────────────────────────────────────────────
 function Projects() {
+  const { ref, inView } = useInView();
   return (
-    <section id="projects" className="max-w-3xl mx-auto px-6 py-12 border-t border-gray-100 dark:border-gray-800">
+    <section
+      id="projects"
+      ref={ref}
+      className={`reveal ${inView ? "in-view" : ""} max-w-3xl mx-auto px-6 py-12 border-t border-gray-100 dark:border-gray-800`}
+    >
       <h2 className="text-xs font-semibold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 mb-6">
         Projects
       </h2>
       <div className="space-y-6">
-        {projects.map((p) => (
+        {projects.map((p, i) => (
           <div
             key={p.name}
-            className="rounded-xl border border-gray-200 dark:border-gray-700 p-5 hover:border-indigo-300 dark:hover:border-indigo-600 hover:shadow-sm transition-all"
+            className="reveal in-view rounded-xl border border-gray-200 dark:border-gray-700 p-5
+                       hover:border-indigo-300 dark:hover:border-indigo-600
+                       hover:shadow-md hover:-translate-y-0.5
+                       transition-all duration-250"
+            style={{ transitionDelay: `${i * 80}ms` }}
           >
             <div className="flex items-start justify-between gap-4">
               <div>
@@ -273,7 +353,10 @@ function Projects() {
                   href={p.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="shrink-0 text-xs font-medium text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-700 rounded-full px-3 py-1 hover:bg-indigo-50 dark:hover:bg-indigo-950 transition-colors"
+                  className="shrink-0 text-xs font-medium text-indigo-600 dark:text-indigo-400
+                             border border-indigo-200 dark:border-indigo-700 rounded-full px-3 py-1
+                             hover:bg-indigo-50 dark:hover:bg-indigo-950
+                             hover:border-indigo-400 transition-all duration-200 cursor-pointer"
                 >
                   Visit ↗
                 </a>
@@ -299,46 +382,55 @@ function Projects() {
 
 // ── Content ───────────────────────────────────────────────────────────────────
 function Content() {
+  const { ref, inView } = useInView();
+
   const channels = [
     {
       platform: "YouTube",
       handle: "@abinaelsl",
       href: "https://www.youtube.com/@abinaelsl",
       description: "Videos on tech, startups, and student life in Japan.",
-      light: "bg-red-50 text-red-600 border-red-100",
-      dark: "dark:bg-red-950/40 dark:text-red-400 dark:border-red-900",
+      light: "bg-red-50 text-red-600 border-red-100 hover:border-red-300 hover:bg-red-100",
+      dark: "dark:bg-red-950/40 dark:text-red-400 dark:border-red-900 dark:hover:border-red-700",
     },
     {
       platform: "Instagram",
       handle: "@abinaelsl",
       href: "https://instagram.com/abinaelsl",
       description: "Photos and reels from Japan and everyday life.",
-      light: "bg-pink-50 text-pink-600 border-pink-100",
-      dark: "dark:bg-pink-950/40 dark:text-pink-400 dark:border-pink-900",
+      light: "bg-pink-50 text-pink-600 border-pink-100 hover:border-pink-300 hover:bg-pink-100",
+      dark: "dark:bg-pink-950/40 dark:text-pink-400 dark:border-pink-900 dark:hover:border-pink-700",
     },
     {
       platform: "TikTok",
       handle: "@abinaelsl",
       href: "#", // TODO: your TikTok profile URL
       description: "Short-form content on productivity and Japan life.",
-      light: "bg-gray-50 text-gray-800 border-gray-200",
-      dark: "dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700",
+      light: "bg-gray-50 text-gray-800 border-gray-200 hover:border-gray-400 hover:bg-gray-100",
+      dark: "dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 dark:hover:border-gray-500",
     },
   ];
 
   return (
-    <section className="max-w-3xl mx-auto px-6 py-12 border-t border-gray-100 dark:border-gray-800">
+    <section
+      ref={ref}
+      className={`reveal ${inView ? "in-view" : ""} max-w-3xl mx-auto px-6 py-12 border-t border-gray-100 dark:border-gray-800`}
+    >
       <h2 className="text-xs font-semibold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 mb-6">
         Content
       </h2>
       <div className="grid sm:grid-cols-3 gap-4">
-        {channels.map((c) => (
+        {channels.map((c, i) => (
           <a
             key={c.platform}
             href={c.href}
             target="_blank"
             rel="noopener noreferrer"
-            className={`rounded-xl border p-4 hover:shadow-sm transition-all ${c.light} ${c.dark}`}
+            className={`rounded-xl border p-4
+                        hover:-translate-y-0.5 hover:shadow-sm
+                        transition-all duration-200 cursor-pointer
+                        ${c.light} ${c.dark}`}
+            style={{ transitionDelay: `${i * 60}ms` }}
           >
             <p className="font-semibold">{c.platform}</p>
             <p className="text-sm font-mono mt-0.5 opacity-70">{c.handle}</p>
@@ -352,14 +444,19 @@ function Content() {
 
 // ── Footer / Contact ──────────────────────────────────────────────────────────
 function Footer() {
+  const { ref, inView } = useInView();
   return (
-    <footer id="contact" className="border-t border-gray-100 dark:border-gray-800 mt-auto">
+    <footer
+      id="contact"
+      ref={ref}
+      className={`reveal ${inView ? "in-view" : ""} border-t border-gray-100 dark:border-gray-800 mt-auto`}
+    >
       <div className="max-w-3xl mx-auto px-6 py-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <p className="font-semibold text-gray-900 dark:text-gray-100">Abinael Sarungallo Lumempouw</p>
           <a
             href="mailto:abinaelad@gmail.com"
-            className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline"
+            className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline transition-colors"
           >
             abinaelad@gmail.com
           </a>
@@ -372,7 +469,9 @@ function Footer() {
               aria-label={s.label}
               target={s.href.startsWith("mailto") ? undefined : "_blank"}
               rel="noopener noreferrer"
-              className="text-gray-400 dark:text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+              className="text-gray-400 dark:text-gray-500
+                         hover:text-indigo-600 dark:hover:text-indigo-400
+                         hover:scale-115 transition-all duration-150 cursor-pointer"
             >
               {s.icon}
             </a>
