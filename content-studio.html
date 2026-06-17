@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Content Studio · abinael.xyz</title>
+<style>
+  :root {
+    --bg: #f7f7f9; --card: #ffffff; --ink: #18181b; --muted: #6b7280;
+    --line: #e5e7eb; --indigo: #4f46e5; --indigo-soft: #eef2ff; --danger: #dc2626;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  header {
+    position: sticky; top: 0; z-index: 10; background: rgba(247,247,249,0.9);
+    backdrop-filter: blur(8px); border-bottom: 1px solid var(--line);
+  }
+  .bar { max-width: 920px; margin: 0 auto; padding: 14px 20px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .brand { font-weight: 700; letter-spacing: -.01em; margin-right: auto; }
+  .brand small { font-weight: 500; color: var(--muted); margin-left: 8px; }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 20px; }
+  .tabs { display: flex; gap: 4px; margin: 0 0 18px; }
+  .tab { padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); cursor: pointer; font-weight: 500; color: var(--muted); }
+  .tab.active { background: var(--indigo); color: #fff; border-color: var(--indigo); }
+  button { font: inherit; cursor: pointer; }
+  .btn { padding: 8px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: var(--ink); font-weight: 500; }
+  .btn:hover { border-color: #c7c9d1; }
+  .btn.primary { background: var(--indigo); color: #fff; border-color: var(--indigo); }
+  .btn.primary:hover { background: #4338ca; }
+  .btn.ghost { background: transparent; }
+  .btn.danger { color: var(--danger); border-color: #f0caca; }
+  .btn.sm { padding: 5px 10px; font-size: 13px; border-radius: 8px; }
+  .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .spacer { flex: 1; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; margin-bottom: 16px; }
+  .card h3 { margin: 0 0 2px; font-size: 16px; }
+  .card .meta { color: var(--muted); font-size: 13px; margin-bottom: 12px; }
+  label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin: 12px 0 5px; }
+  input[type=text], input[type=date], textarea {
+    width: 100%; padding: 9px 11px; border: 1px solid var(--line); border-radius: 9px;
+    background: #fff; color: var(--ink); font: inherit; resize: vertical;
+  }
+  input:focus, textarea:focus { outline: none; border-color: var(--indigo); box-shadow: 0 0 0 3px rgba(79,70,229,.15); }
+  textarea { line-height: 1.6; }
+  textarea.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13.5px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } }
+  .hint { font-size: 12.5px; color: var(--muted); margin-top: 5px; }
+  .hl { border: 1px dashed var(--line); border-radius: 10px; padding: 10px; margin-bottom: 8px; background: #fafafa; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; padding: 3px 9px; border-radius: 999px; background: var(--indigo-soft); color: var(--indigo); font-weight: 600; }
+  .status { font-size: 13px; color: var(--muted); }
+  .status.ok { color: #15803d; }
+  .status.warn { color: #b45309; }
+  .banner { background: var(--indigo-soft); border: 1px solid #dcdcfb; border-radius: var(--radius); padding: 14px 16px; margin-bottom: 18px; font-size: 14px; }
+  .banner code { background: #fff; padding: 1px 6px; border-radius: 5px; border: 1px solid var(--line); font-size: 12.5px; }
+  details.help { margin-bottom: 18px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 4px 16px; }
+  details.help summary { cursor: pointer; font-weight: 600; padding: 12px 0; }
+  details.help ol { margin: 0 0 12px; padding-left: 20px; }
+  details.help li { margin: 6px 0; }
+  details.help code { background: #f1f1f4; padding: 1px 6px; border-radius: 5px; font-size: 13px; }
+  .toast { position: fixed; bottom: 20px; right: 20px; background: #18181b; color: #fff; padding: 12px 16px; border-radius: 10px; box-shadow: 0 8px 30px rgba(0,0,0,.2); opacity: 0; transform: translateY(8px); transition: .25s; pointer-events: none; max-width: 320px; }
+  .toast.show { opacity: 1; transform: translateY(0); }
+  .empty { color: var(--muted); text-align: center; padding: 30px; border: 1px dashed var(--line); border-radius: var(--radius); }
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <div class="brand">Content Studio <small>abinael.xyz</small></div>
+    <span id="folderStatus" class="status warn">Not connected</span>
+    <button class="btn" id="connectBtn">Connect site folder</button>
+    <button class="btn primary" id="saveBtn">Save to site</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="banner" id="banner"></div>
+
+  <details class="help">
+    <summary>How this works (read me once)</summary>
+    <ol>
+      <li><b>Connect your site folder:</b> click <i>Connect site folder</i> and pick the <code>portfolio-website</code> folder. (Works in Chrome, Edge, Brave. In Safari/Firefox, use the Import / Download buttons instead.)</li>
+      <li><b>Add or edit</b> Writing posts, Projects, and Research below. Changes are auto-saved in this browser as you type.</li>
+      <li><b>Click "Save to site"</b> — this writes the JSON files in <code>app/content/</code>.</li>
+      <li><b>Publish:</b> in a terminal in the project folder, run <code>git add -A &amp;&amp; git commit -m "content update" &amp;&amp; git push</code> (or <code>npx vercel --prod</code>). Your live site updates in a minute or two.</li>
+    </ol>
+    <p class="hint">Tip: Writing post bodies use <b>Markdown</b> — <code>## Heading</code>, <code>**bold**</code>, <code>*italic*</code>, <code>- list item</code>, <code>&gt; quote</code>, <code>[link](https://…)</code>. To add a project screenshot, drop the image in <code>public/projects/</code> and put its path (e.g. <code>/projects/myshot.png</code>) in the Image field.</p>
+  </details>
+
+  <div class="tabs" id="tabs"></div>
+  <div id="list"></div>
+
+  <div class="row" style="margin-top: 8px;">
+    <button class="btn primary" id="addBtn">+ Add new</button>
+    <div class="spacer"></div>
+    <button class="btn ghost sm" id="importBtn">Import JSON…</button>
+    <button class="btn ghost sm" id="downloadBtn">Download this file</button>
+    <input type="file" id="fileInput" accept="application/json" style="display:none" />
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Seed content: the current site content, used on first run before you connect a folder. -->
+<script type="application/json" id="seed-posts">
+[
+  {
+    "slug": "net-zero-type-36",
+    "title": "The net-zero house starter kit: retrofitting Indonesia's Type 36 home",
+    "date": "2026-02-15",
+    "summary": "Why the cheapest, most-built house in Indonesia is the right place to start a net-zero conversation — a short summary of my final degree project.",
+    "body": "Most net-zero building research aims high — bespoke homes, premium envelopes, budgets the mass market will never reach. My final degree project at Kyushu University goes the other way: to the **Type 36**, the 36 m² \"starter home\" mass-produced by the thousand across Indonesia.\n\n## The thermal oven\n\nA standard Type 36 is built from uninsulated *batako* concrete-block walls and a thin zinc roof. In Jakarta's 29–31 °C climate, that envelope behaves like an oven.\n\n## The result\n\n> The combined kit cut simulated annual electricity use by ~57% — from 10,553 kWh to 4,521 kWh.\n\n[Read the full paper on ResearchGate →](https://www.researchgate.net/publication/406981225_Abinael_Type_36_House_Paper_Final)"
+  },
+  {
+    "slug": "local-llm-experiment",
+    "title": "Can a local LLM build a real app? (FinTrack)",
+    "date": "2026-06-12",
+    "summary": "Notes from FinTrack — handing the first build to a Gemma model running on local hardware, then hardening it with Claude.",
+    "body": "FinTrack started as a question, not a product: how far can a model running entirely on local hardware get on a real full-stack app?\n\n## The fix\n\nI handed the broken codebase to Claude to review and harden. The experiment became something that actually runs."
+  }
+]
+</script>
+<script type="application/json" id="seed-projects">
+[
+  { "slug": "statusmaxx", "name": "StatusMaxx", "tagline": "QREC grant winner · applying for YC Fall 2026.", "description": "StatusMaxx helps users discover credit card promotions matched to their wallet.", "href": "https://statusmaxx.vercel.app", "tags": ["React Native", "Expo", "Supabase"], "year": "2025 — present", "role": "Founder", "status": "Building · YC F26 applicant", "image": "", "overview": "Connect your site folder to load the full content.", "highlights": [], "stack": ["Expo", "React Native", "Python", "Supabase"] }
+]
+</script>
+<script type="application/json" id="seed-research">
+[
+  { "title": "The Net-Zero House Starter Kit: Retrofitting the Indonesian Type 36 “Starter Home” for Energy Efficiency", "authors": "Abinael Sarungallo Lumempouw", "venue": "Final Degree Project, Kyushu University · 2026", "href": "https://www.researchgate.net/publication/406981225_Abinael_Type_36_House_Paper_Final", "tags": ["Net Zero", "Building Retrofit"] }
+]
+</script>
+
+<script>
+(function () {
+  "use strict";
+
+  // ── Schemas ───────────────────────────────────────────────────────────────
+  const today = () => new Date().toISOString().slice(0, 10);
+  const SCHEMAS = {
+    posts: {
+      label: "Writing", file: "posts.json", title: (it) => it.title || "(untitled post)",
+      fields: [
+        { key: "title", label: "Title", type: "text" },
+        { key: "slug", label: "Slug (URL)", type: "slug", from: "title" },
+        { key: "date", label: "Date", type: "date", half: true },
+        { key: "summary", label: "Summary (1–2 lines)", type: "textarea", rows: 2 },
+        { key: "body", label: "Body (Markdown)", type: "markdown", rows: 14 },
+      ],
+      blank: () => ({ slug: "", title: "", date: today(), summary: "", body: "" }),
+    },
+    projects: {
+      label: "Projects", file: "projects.json", title: (it) => it.name || "(untitled project)",
+      fields: [
+        { key: "name", label: "Name", type: "text", half: true },
+        { key: "slug", label: "Slug (URL)", type: "slug", from: "name", half: true },
+        { key: "tagline", label: "Tagline (one line)", type: "text" },
+        { key: "description", label: "Card description", type: "textarea", rows: 3 },
+        { key: "href", label: "Live URL", type: "text", half: true },
+        { key: "image", label: "Image path (optional)", type: "text", half: true },
+        { key: "year", label: "Year", type: "text", half: true },
+        { key: "role", label: "Role", type: "text", half: true },
+        { key: "status", label: "Status", type: "text", half: true },
+        { key: "tags", label: "Tags (comma-separated)", type: "list", half: true },
+        { key: "stack", label: "Stack (comma-separated)", type: "list" },
+        { key: "overview", label: "Overview (longer intro)", type: "textarea", rows: 4 },
+        { key: "highlights", label: "Highlights", type: "highlights" },
+      ],
+      blank: () => ({ slug: "", name: "", tagline: "", description: "", href: "", image: "", year: "", role: "", status: "", tags: [], stack: [], overview: "", highlights: [] }),
+    },
+    research: {
+      label: "Research", file: "research.json", title: (it) => it.title || "(untitled entry)",
+      fields: [
+        { key: "title", label: "Title", type: "text" },
+        { key: "authors", label: "Authors", type: "text", half: true },
+        { key: "venue", label: "Venue", type: "text", half: true },
+        { key: "href", label: "Link", type: "text" },
+        { key: "tags", label: "Tags (comma-separated)", type: "list" },
+      ],
+      blank: () => ({ title: "", authors: "", venue: "", href: "", tags: [] }),
+    },
+  };
+  const COLLS = ["posts", "projects", "research"];
+
+  // ── State ──────────────────────────────────────────────────────────────────
+  let state = { posts: [], projects: [], research: [] };
+  let active = "posts";
+  let dirHandle = null;
+
+  const slugify = (s) => (s || "").toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  const $ = (id) => document.getElementById(id);
+
+  function toast(msg, ms) {
+    const t = $("toast"); t.textContent = msg; t.classList.add("show");
+    clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove("show"), ms || 2600);
+  }
+
+  // ── Persistence (localStorage working cache) ────────────────────────────────
+  function cache() { try { localStorage.setItem("contentStudio", JSON.stringify(state)); } catch (e) {} }
+  function restoreCache() {
+    try { const s = localStorage.getItem("contentStudio"); if (s) return JSON.parse(s); } catch (e) {}
+    return null;
+  }
+  function seed() {
+    const read = (id) => { try { return JSON.parse($(id).textContent); } catch (e) { return []; } };
+    return { posts: read("seed-posts"), projects: read("seed-projects"), research: read("seed-research") };
+  }
+
+  // ── IndexedDB (remember the folder handle) ──────────────────────────────────
+  function idb() {
+    return new Promise((res, rej) => {
+      const r = indexedDB.open("contentStudio", 1);
+      r.onupgradeneeded = () => r.result.createObjectStore("kv");
+      r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error);
+    });
+  }
+  async function idbSet(k, v) { const db = await idb(); return new Promise((res) => { const t = db.transaction("kv", "readwrite"); t.objectStore("kv").put(v, k); t.oncomplete = () => res(); }); }
+  async function idbGet(k) { const db = await idb(); return new Promise((res) => { const t = db.transaction("kv", "readonly"); const q = t.objectStore("kv").get(k); q.onsuccess = () => res(q.result); q.onerror = () => res(null); }); }
+
+  async function verifyPermission(handle) {
+    const opts = { mode: "readwrite" };
+    if ((await handle.queryPermission(opts)) === "granted") return true;
+    if ((await handle.requestPermission(opts)) === "granted") return true;
+    return false;
+  }
+
+  // ── Folder read / write ─────────────────────────────────────────────────────
+  async function contentDir(create) {
+    const app = await dirHandle.getDirectoryHandle("app", { create: create });
+    return app.getDirectoryHandle("content", { create: create });
+  }
+  async function loadFromFolder() {
+    const dir = await contentDir(false);
+    for (const c of COLLS) {
+      try {
+        const fh = await dir.getFileHandle(SCHEMAS[c].file);
+        const txt = await (await fh.getFile()).text();
+        state[c] = JSON.parse(txt);
+      } catch (e) { /* file may not exist yet */ }
+    }
+    cache(); render();
+  }
+  async function saveToFolder() {
+    const dir = await contentDir(true);
+    for (const c of COLLS) {
+      const fh = await dir.getFileHandle(SCHEMAS[c].file, { create: true });
+      const w = await fh.createWritable();
+      await w.write(JSON.stringify(cleaned(c), null, 2) + "\n");
+      await w.close();
+    }
+  }
+
+  // strip empty optional fields, ensure arrays
+  function cleaned(c) {
+    return state[c].map((it) => {
+      const out = JSON.parse(JSON.stringify(it));
+      if (Array.isArray(out.tags)) out.tags = out.tags.filter(Boolean);
+      if (Array.isArray(out.stack)) out.stack = out.stack.filter(Boolean);
+      if (Array.isArray(out.highlights)) out.highlights = out.highlights.filter((h) => h.label || h.detail);
+      return out;
+    });
+  }
+
+  // ── Connect / save handlers ─────────────────────────────────────────────────
+  async function connect() {
+    if (!window.showDirectoryPicker) {
+      toast("This browser can't connect folders — use Import / Download instead.");
+      return;
+    }
+    try {
+      const handle = await window.showDirectoryPicker({ mode: "readwrite" });
+      // sanity check: does it look like the project?
+      let ok = true;
+      try { await handle.getDirectoryHandle("app"); } catch (e) { ok = false; }
+      if (!ok && !confirm("That folder has no 'app' directory — is it really portfolio-website? Continue anyway?")) return;
+      dirHandle = handle;
+      await idbSet("dir", handle);
+      setFolderStatus(true);
+      await loadFromFolder();
+      toast("Connected. Loaded your content.");
+    } catch (e) { /* user cancelled */ }
+  }
+
+  async function save() {
+    if (dirHandle) {
+      try {
+        if (!(await verifyPermission(dirHandle))) { toast("Permission denied."); return; }
+        await saveToFolder();
+        toast("Saved to app/content/. Commit & push to publish.", 4200);
+        return;
+      } catch (e) { toast("Save failed: " + e.message); return; }
+    }
+    // fallback: download all three
+    for (const c of COLLS) downloadOne(c);
+    toast("Downloaded JSON files — drop them into app/content/.", 4200);
+  }
+
+  function downloadOne(c) {
+    const blob = new Blob([JSON.stringify(cleaned(c), null, 2) + "\n"], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = SCHEMAS[c].file; a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  }
+
+  function setFolderStatus(connected) {
+    const el = $("folderStatus");
+    el.textContent = connected ? "Connected ✓" : "Not connected";
+    el.className = "status " + (connected ? "ok" : "warn");
+  }
+
+  // ── Rendering ────────────────────────────────────────────────────────────────
+  function render() {
+    // tabs
+    const tabs = $("tabs"); tabs.innerHTML = "";
+    COLLS.forEach((c) => {
+      const b = document.createElement("button");
+      b.className = "tab" + (c === active ? " active" : "");
+      b.textContent = SCHEMAS[c].label + " (" + state[c].length + ")";
+      b.onclick = () => { active = c; render(); };
+      tabs.appendChild(b);
+    });
+    // list
+    const list = $("list"); list.innerHTML = "";
+    const sc = SCHEMAS[active];
+    if (!state[active].length) {
+      list.innerHTML = '<div class="empty">No ' + sc.label.toLowerCase() + " yet. Click “+ Add new”.</div>";
+      return;
+    }
+    state[active].forEach((item, i) => list.appendChild(renderCard(active, item, i, sc)));
+  }
+
+  function renderCard(coll, item, i, sc) {
+    const card = document.createElement("div");
+    card.className = "card";
+    const head = document.createElement("div");
+    head.className = "row";
+    head.innerHTML = '<h3 style="margin-right:auto">' + escapeHtml(sc.title(item)) + "</h3>";
+    head.appendChild(iconBtn("↑", () => move(coll, i, -1)));
+    head.appendChild(iconBtn("↓", () => move(coll, i, 1)));
+    const del = document.createElement("button");
+    del.className = "btn danger sm"; del.textContent = "Delete";
+    del.onclick = () => { if (confirm("Delete this " + (sc.title(item) || "item") + "?")) { state[coll].splice(i, 1); cache(); render(); } };
+    head.appendChild(del);
+    card.appendChild(head);
+
+    const grid = document.createElement("div");
+    sc.fields.forEach((f) => grid.appendChild(field(coll, item, i, f)));
+    card.appendChild(grid);
+    return card;
+  }
+
+  function iconBtn(label, fn) { const b = document.createElement("button"); b.className = "btn ghost sm"; b.textContent = label; b.onclick = fn; return b; }
+
+  function field(coll, item, i, f) {
+    const w = document.createElement("div");
+    w.style.display = f.half ? "inline-block" : "block";
+    w.style.width = f.half ? "calc(50% - 8px)" : "100%";
+    w.style.verticalAlign = "top";
+    if (f.half) w.style.marginRight = "8px";
+
+    const lab = document.createElement("label"); lab.textContent = f.label; w.appendChild(lab);
+
+    if (f.type === "textarea" || f.type === "markdown") {
+      const ta = document.createElement("textarea");
+      ta.rows = f.rows || 3; if (f.type === "markdown") ta.className = "mono";
+      ta.value = item[f.key] || "";
+      ta.oninput = () => { item[f.key] = ta.value; cache(); };
+      w.appendChild(ta);
+      if (f.type === "markdown") { const h = document.createElement("div"); h.className = "hint"; h.textContent = "Markdown: ## Heading · **bold** · *italic* · - list · > quote · [text](url)"; w.appendChild(h); }
+    } else if (f.type === "list") {
+      const inp = document.createElement("input"); inp.type = "text";
+      inp.value = (item[f.key] || []).join(", ");
+      inp.oninput = () => { item[f.key] = inp.value.split(",").map((s) => s.trim()).filter(Boolean); cache(); };
+      w.appendChild(inp);
+    } else if (f.type === "highlights") {
+      w.appendChild(highlights(item));
+    } else { // text, slug, date
+      const inp = document.createElement("input");
+      inp.type = f.type === "date" ? "date" : "text";
+      inp.value = item[f.key] || "";
+      inp.oninput = () => {
+        item[f.key] = inp.value;
+        if (f.from && !item.slug) { /* leave */ }
+        cache();
+      };
+      if (f.type === "slug") { inp.placeholder = "auto from title"; }
+      if (f.from) {
+        // auto-fill slug when the source field changes and slug is empty/derived
+        inp.dataset.from = f.from;
+      }
+      w.appendChild(inp);
+      if (f.type === "slug") {
+        const b = document.createElement("button"); b.className = "btn ghost sm"; b.textContent = "↻ from " + f.from; b.style.marginTop = "6px";
+        b.onclick = () => { item.slug = slugify(item[f.from]); cache(); render(); };
+        w.appendChild(b);
+      }
+    }
+    return w;
+  }
+
+  function highlights(item) {
+    if (!Array.isArray(item.highlights)) item.highlights = [];
+    const box = document.createElement("div");
+    function draw() {
+      box.innerHTML = "";
+      item.highlights.forEach((h, j) => {
+        const row = document.createElement("div"); row.className = "hl";
+        const l = document.createElement("input"); l.type = "text"; l.placeholder = "Label (e.g. Problem)"; l.value = h.label || "";
+        l.oninput = () => { h.label = l.value; cache(); };
+        const d = document.createElement("textarea"); d.rows = 2; d.placeholder = "Detail"; d.value = h.detail || ""; d.style.marginTop = "6px";
+        d.oninput = () => { h.detail = d.value; cache(); };
+        const rm = document.createElement("button"); rm.className = "btn danger sm"; rm.textContent = "Remove"; rm.style.marginTop = "6px";
+        rm.onclick = () => { item.highlights.splice(j, 1); cache(); draw(); };
+        row.appendChild(l); row.appendChild(d); row.appendChild(rm); box.appendChild(row);
+      });
+      const add = document.createElement("button"); add.className = "btn ghost sm"; add.textContent = "+ Add highlight";
+      add.onclick = () => { item.highlights.push({ label: "", detail: "" }); cache(); draw(); };
+      box.appendChild(add);
+    }
+    draw();
+    return box;
+  }
+
+  function move(coll, i, dir) {
+    const j = i + dir; if (j < 0 || j >= state[coll].length) return;
+    const arr = state[coll]; [arr[i], arr[j]] = [arr[j], arr[i]]; cache(); render();
+  }
+
+  function escapeHtml(s) { return (s || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+
+  // ── Wire up ──────────────────────────────────────────────────────────────────
+  $("connectBtn").onclick = connect;
+  $("saveBtn").onclick = save;
+  $("addBtn").onclick = () => { state[active].unshift(SCHEMAS[active].blank()); cache(); render(); };
+  $("downloadBtn").onclick = () => downloadOne(active);
+  $("importBtn").onclick = () => $("fileInput").click();
+  $("fileInput").onchange = (e) => {
+    const file = e.target.files[0]; if (!file) return;
+    const r = new FileReader();
+    r.onload = () => {
+      try {
+        const data = JSON.parse(r.result);
+        if (!Array.isArray(data)) throw new Error("Expected a JSON array");
+        state[active] = data; cache(); render(); toast("Imported " + data.length + " into " + SCHEMAS[active].label + ".");
+      } catch (err) { toast("Import failed: " + err.message); }
+    };
+    r.readAsText(file);
+    e.target.value = "";
+  };
+
+  function setBanner() {
+    const supported = !!window.showDirectoryPicker;
+    $("banner").innerHTML = supported
+      ? "Click <b>Connect site folder</b> and choose your <code>portfolio-website</code> folder to edit content directly, then <b>Save to site</b>. Don’t forget to commit &amp; push to publish."
+      : "Your browser doesn’t support direct folder editing (use Chrome/Edge/Brave for that). You can still <b>Import JSON…</b>, edit, then <b>Download</b> each file into <code>app/content/</code>.";
+  }
+
+  // ── Boot ─────────────────────────────────────────────────────────────────────
+  (async function boot() {
+    setBanner();
+    const cached = restoreCache();
+    state = cached || seed();
+    // ensure shape
+    COLLS.forEach((c) => { if (!Array.isArray(state[c])) state[c] = []; });
+    render();
+    // try to reconnect to a remembered folder
+    try {
+      const h = await idbGet("dir");
+      if (h) {
+        if (await verifyPermission(h)) { dirHandle = h; setFolderStatus(true); await loadFromFolder(); }
+      }
+    } catch (e) {}
+  })();
+})();
+</script>
+</body>
+</html>

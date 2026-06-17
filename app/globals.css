@@ -3,83 +3,38 @@
 /* Class-based dark mode for next-themes */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Map the next/font CSS variables to Tailwind's font tokens so the
+   font-sans / font-display / font-mono utilities use them. */
+@theme inline {
+  --font-sans: var(--ff-body), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--ff-display), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--ff-mono), ui-monospace, SFMono-Regular, monospace;
+}
+
 html {
   scroll-behavior: smooth;
 }
 
+/* Offset anchored sections so the sticky header doesn't cover headings. */
+:where(section[id], footer[id]) {
+  scroll-margin-top: 5rem;
+}
+
 body {
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading), system-ui, sans-serif;
+  font-family: var(--font-display);
 }
 
-/* ── Entrance animations ───────────────────────────────────────────────────── */
-@keyframes fade-in-up {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
+::selection {
+  background-color: color-mix(in oklab, var(--color-indigo-500) 22%, transparent);
 }
 
-@keyframes scale-in {
-  from { opacity: 0; transform: scale(0.88); }
-  to   { opacity: 1; transform: scale(1); }
-}
-
-.animate-fade-in-up {
-  animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.animate-scale-in {
-  animation: scale-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-}
-
-/* ── Scroll reveal ─────────────────────────────────────────────────────────── */
-.reveal {
-  opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.reveal.in-view {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ── Nav link underline slide ──────────────────────────────────────────────── */
-.nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 1.5px;
-  background-color: #6366f1;
-  transition: width 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.dark .nav-link::after {
-  background-color: #818cf8;
-}
-
-.nav-link:hover::after {
-  width: 100%;
-}
-
-/* ── Respect reduced motion ────────────────────────────────────────────────── */
+/* Respect reduced-motion at the platform level too (motion handles components). */
 @media (prefers-reduced-motion: reduce) {
-  .animate-fade-in-up,
-  .animate-scale-in {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
-
-  .reveal,
-  .reveal.in-view {
-    opacity: 1;
-    transform: none;
-    transition: none;
+  html {
+    scroll-behavior: auto;
   }
 }
