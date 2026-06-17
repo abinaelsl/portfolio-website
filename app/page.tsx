@@ -109,6 +109,22 @@ const projects = [
     href: "https://statusmaxx.vercel.app",
     tags: ["React Native", "Expo", "Supabase", "Japan"],
   },
+  {
+    name: "Sarungallo Holdings",
+    tagline: "Private family-office portfolio tracker — real estate, equities, gold, and crypto.",
+    description:
+      "A self-hosted dashboard for tracking multi-asset holdings valued in USD or IDR. Live price refresh writes timestamped snapshots so value-over-time graphs accumulate automatically. Features allocation donut, sector breakdown, top movers, and per-asset detail pages. Built with Next.js and Supabase.",
+    href: "https://sarungallo-holdings-8rgreqrpr-abinaelsls-projects.vercel.app",
+    tags: ["Next.js", "Supabase", "Finance", "IDR / USD"],
+  },
+  {
+    name: "FinTrack",
+    tagline: "Personal finance tracker with multi-currency support and spending analytics.",
+    description:
+      "Track income and expenses across IDR, USD, and JPY — foreign amounts are auto-converted to IDR at daily FX rates (no API key, free). Visualise trends with an area chart and spending breakdown with a category donut chart. Filter transaction history by month and year. Built with Next.js and Supabase.",
+    href: "https://financial-tracker-7s36ptxj8-abinaelsls-projects.vercel.app",
+    tags: ["Next.js", "Supabase", "Finance", "Multi-currency"],
+  },
 ];
 
 // ── Theme toggle ──────────────────────────────────────────────────────────────
