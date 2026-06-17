@@ -103,27 +103,27 @@ const papers = [
 const projects = [
   {
     name: "StatusMaxx",
-    tagline: "Match your payment cards to the best merchant promos — launched in Japan.",
+    tagline: "QREC grant winner · applying for YC Fall 2026.",
     description:
-      "StatusMaxx helps users discover credit card promotions matched to their wallet. Built with Expo/React Native (iOS & Android), a Python pipeline for daily promo extraction, and Supabase as the backend.",
+      "StatusMaxx helps users discover credit card promotions matched to their wallet. Winner of the Kyushu University QREC entrepreneurship fund grant. Built with Expo/React Native (iOS & Android), a Python pipeline for daily promo extraction, and Supabase as the backend.",
     href: "https://statusmaxx.vercel.app",
-    tags: ["React Native", "Expo", "Supabase", "Japan"],
+    tags: ["React Native", "Expo", "Supabase", "QREC Grant", "YC F26"],
   },
   {
     name: "Sarungallo Holdings",
-    tagline: "Private family-office portfolio tracker — real estate, equities, gold, and crypto.",
+    tagline: "Tracking a $3.5M family-office investment fund across four asset classes.",
     description:
-      "A self-hosted dashboard for tracking multi-asset holdings valued in USD or IDR. Live price refresh writes timestamped snapshots so value-over-time graphs accumulate automatically. Features allocation donut, sector breakdown, top movers, and per-asset detail pages. Built with Next.js and Supabase.",
+      "A self-hosted dashboard for a $3.5 million family-office fund spanning real estate, equities, gold, and crypto — valued in USD or IDR. Live price refresh writes timestamped snapshots so value-over-time graphs accumulate automatically. Features allocation donut, sector breakdown, top movers, and per-asset detail pages. Built with Next.js and Supabase.",
     href: "https://sarungallo-holdings-8rgreqrpr-abinaelsls-projects.vercel.app",
     tags: ["Next.js", "Supabase", "Finance", "IDR / USD"],
   },
   {
     name: "FinTrack",
-    tagline: "Personal finance tracker with multi-currency support and spending analytics.",
+    tagline: "An experiment: can a locally-run LLM build a full-stack app?",
     description:
-      "Track income and expenses across IDR, USD, and JPY — foreign amounts are auto-converted to IDR at daily FX rates (no API key, free). Visualise trends with an area chart and spending breakdown with a category donut chart. Filter transaction history by month and year. Built with Next.js and Supabase.",
+      "Built by Gemma 4 running locally, then reviewed and hardened by Claude. Tracks income and expenses across IDR, USD, and JPY — with auto-conversion to IDR at daily FX rates. Includes trend charts, a category spending donut, and month/year history filters. Built with Next.js and Supabase.",
     href: "https://financial-tracker-7s36ptxj8-abinaelsls-projects.vercel.app",
-    tags: ["Next.js", "Supabase", "Finance", "Multi-currency"],
+    tags: ["Next.js", "Supabase", "Gemma 4", "Local LLM"],
   },
 ];
 
