@@ -80,7 +80,7 @@
     "name": "FinTrack",
     "tagline": "An experiment: can a locally-run LLM build a full-stack app?",
     "description": "Built first by a local Gemma model, then reviewed and hardened by Claude. Tracks income and expenses across IDR, USD, and JPY with daily FX conversion, trend charts, a category donut, and month/year history filters. Next.js + Supabase.",
-    "href": "https://financial-tracker-7s36ptxj8-abinaelsls-projects.vercel.app",
+    "href": "https://abinaelfintrack.vercel.app/",
     "tags": [
       "Next.js",
       "Supabase",
