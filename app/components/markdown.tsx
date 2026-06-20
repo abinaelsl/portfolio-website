@@ -53,6 +53,17 @@ export function Markdown({ children }: { children: string }) {
           <strong className="font-semibold text-gray-900 dark:text-gray-100">{children}</strong>
         ),
         em: ({ children }) => <em className="italic">{children}</em>,
+        img: ({ src, alt }) => (
+          // Markdown images (e.g. dropped in via the content studio) — plain <img>
+          // keeps unknown dimensions simple; next/image needs explicit width/height.
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={typeof src === "string" ? src : ""}
+            alt={alt || ""}
+            loading="lazy"
+            className="my-7 w-full rounded-xl border border-gray-200 dark:border-gray-800"
+          />
+        ),
         code: ({ children }) => (
           <code className="font-mono text-[0.85em] px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-indigo-600 dark:text-indigo-400">
             {children}

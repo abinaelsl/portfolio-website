@@ -65,6 +65,18 @@
   .toast { position: fixed; bottom: 20px; right: 20px; background: #18181b; color: #fff; padding: 12px 16px; border-radius: 10px; box-shadow: 0 8px 30px rgba(0,0,0,.2); opacity: 0; transform: translateY(8px); transition: .25s; pointer-events: none; max-width: 320px; }
   .toast.show { opacity: 1; transform: translateY(0); }
   .empty { color: var(--muted); text-align: center; padding: 30px; border: 1px dashed var(--line); border-radius: var(--radius); }
+  /* drag & drop media */
+  .drop { position: relative; border: 1.5px dashed var(--line); border-radius: 10px; padding: 14px; text-align: center; color: var(--muted); font-size: 13px; cursor: pointer; transition: border-color .15s, background .15s, color .15s; background: #fafafa; }
+  .drop:hover { border-color: var(--indigo); color: var(--indigo); }
+  .drop.over { border-color: var(--indigo); background: var(--indigo-soft); color: var(--indigo); }
+  .drop.busy { opacity: .6; pointer-events: none; }
+  .drop .ico { display: block; font-size: 20px; margin-bottom: 3px; }
+  .drop b { color: var(--ink); font-weight: 600; }
+  .drop.over b { color: var(--indigo); }
+  .thumb { display: none; max-height: 150px; max-width: 100%; width: auto; border-radius: 8px; border: 1px solid var(--line); margin-bottom: 8px; }
+  .media-row { display: flex; gap: 8px; align-items: center; margin-top: 8px; }
+  .media-row input { flex: 1; }
+  textarea.over { border-color: var(--indigo); box-shadow: 0 0 0 3px rgba(79,70,229,.15); }
 </style>
 </head>
 <body>
@@ -88,7 +100,8 @@
       <li><b>Click "Save to site"</b> — this writes the JSON files in <code>app/content/</code>.</li>
       <li><b>Publish:</b> in a terminal in the project folder, run <code>git add -A &amp;&amp; git commit -m "content update" &amp;&amp; git push</code> (or <code>npx vercel --prod</code>). Your live site updates in a minute or two.</li>
     </ol>
-    <p class="hint">Tip: Writing post bodies use <b>Markdown</b> — <code>## Heading</code>, <code>**bold**</code>, <code>*italic*</code>, <code>- list item</code>, <code>&gt; quote</code>, <code>[link](https://…)</code>. To add a project screenshot, drop the image in <code>public/projects/</code> and put its path (e.g. <code>/projects/myshot.png</code>) in the Image field.</p>
+    <p class="hint"><b>Media is drag-and-drop</b> (once your folder is connected): drop an image onto a project’s <i>Cover image</i> box, drag images straight into a Writing body to embed them, or drop a PDF onto a Research <i>Link</i> to host it. Files are copied into <code>public/…</code> and the path is filled in for you — no manual copying.</p>
+    <p class="hint">Writing bodies use <b>Markdown</b> — <code>## Heading</code>, <code>**bold**</code>, <code>*italic*</code>, <code>- list item</code>, <code>&gt; quote</code>, <code>[link](https://…)</code>.</p>
   </details>
 
   <div class="tabs" id="tabs"></div>
@@ -149,7 +162,7 @@
         { key: "slug", label: "Slug (URL)", type: "slug", from: "title" },
         { key: "date", label: "Date", type: "date", half: true },
         { key: "summary", label: "Summary (1–2 lines)", type: "textarea", rows: 2 },
-        { key: "body", label: "Body (Markdown)", type: "markdown", rows: 14 },
+        { key: "body", label: "Body (Markdown)", type: "markdown", rows: 14, drop: { dir: "writing", accept: "image/*", insert: true } },
       ],
       blank: () => ({ slug: "", title: "", date: today(), summary: "", body: "" }),
     },
@@ -161,7 +174,7 @@
         { key: "tagline", label: "Tagline (one line)", type: "text" },
         { key: "description", label: "Card description", type: "textarea", rows: 3 },
         { key: "href", label: "Live URL", type: "text", half: true },
-        { key: "image", label: "Image path (optional)", type: "text", half: true },
+        { key: "image", label: "Cover image (optional)", type: "text", drop: { dir: "projects", accept: "image/*" } },
         { key: "year", label: "Year", type: "text", half: true },
         { key: "role", label: "Role", type: "text", half: true },
         { key: "status", label: "Status", type: "text", half: true },
@@ -178,7 +191,7 @@
         { key: "title", label: "Title", type: "text" },
         { key: "authors", label: "Authors", type: "text", half: true },
         { key: "venue", label: "Venue", type: "text", half: true },
-        { key: "href", label: "Link", type: "text" },
+        { key: "href", label: "Link", type: "text", drop: { dir: "research", accept: ".pdf,image/*", hint: "…or drop a PDF / image here to host it on your site and link to it" } },
         { key: "tags", label: "Tags (comma-separated)", type: "list" },
       ],
       blank: () => ({ title: "", authors: "", venue: "", href: "", tags: [] }),
@@ -262,6 +275,93 @@
       if (Array.isArray(out.stack)) out.stack = out.stack.filter(Boolean);
       if (Array.isArray(out.highlights)) out.highlights = out.highlights.filter((h) => h.label || h.detail);
       return out;
+    });
+  }
+
+  // ── Media (drag & drop → public/<dir>/) ─────────────────────────────────────
+  async function publicDir(subdir, create) {
+    const pub = await dirHandle.getDirectoryHandle("public", { create: create });
+    return subdir ? pub.getDirectoryHandle(subdir, { create: create }) : pub;
+  }
+
+  function safeFileName(name) {
+    const dot = name.lastIndexOf(".");
+    const base = dot > 0 ? name.slice(0, dot) : name;
+    const ext = dot > 0 ? name.slice(dot).toLowerCase() : "";
+    return (slugify(base) || "file") + ext;
+  }
+
+  async function uniqueName(dir, original) {
+    const name = safeFileName(original);
+    const dot = name.lastIndexOf(".");
+    const base = dot > 0 ? name.slice(0, dot) : name;
+    const ext = dot > 0 ? name.slice(dot) : "";
+    let n = 0;
+    while (true) {
+      const candidate = n === 0 ? name : base + "-" + n + ext;
+      try { await dir.getFileHandle(candidate); n++; } // exists → bump
+      catch (e) { return candidate; }                  // free → take it
+    }
+  }
+
+  // Copies a File into public/<subdir>/ and returns its site path (e.g. /projects/foo.png)
+  async function saveMedia(file, subdir) {
+    if (!dirHandle) throw new Error("Connect your site folder first (top-right) to add media.");
+    if (!(await verifyPermission(dirHandle))) throw new Error("Folder permission denied.");
+    const dir = await publicDir(subdir, true);
+    const name = await uniqueName(dir, file.name);
+    const w = await (await dir.getFileHandle(name, { create: true })).createWritable();
+    await w.write(file);
+    await w.close();
+    return "/" + subdir + "/" + name;
+  }
+
+  // Reads an existing image path back from the folder for a live thumbnail.
+  async function loadPreview(path, imgEl) {
+    if (!dirHandle || !path || path[0] !== "/") return;
+    try {
+      const parts = path.replace(/^\//, "").split("/");
+      let dir = await dirHandle.getDirectoryHandle("public");
+      for (let i = 0; i < parts.length - 1; i++) dir = await dir.getDirectoryHandle(parts[i]);
+      const file = await (await dir.getFileHandle(parts[parts.length - 1])).getFile();
+      if (!file.type.startsWith("image/")) return;
+      imgEl.src = URL.createObjectURL(file);
+      imgEl.style.display = "block";
+    } catch (e) { /* not an image / not found */ }
+  }
+
+  function insertAtCursor(ta, text) {
+    const start = ta.selectionStart ?? ta.value.length;
+    const end = ta.selectionEnd ?? ta.value.length;
+    ta.value = ta.value.slice(0, start) + text + ta.value.slice(end);
+    const pos = start + text.length;
+    ta.selectionStart = ta.selectionEnd = pos;
+    ta.focus();
+  }
+
+  function altFromName(name) {
+    const dot = name.lastIndexOf(".");
+    return (dot > 0 ? name.slice(0, dot) : name).replace(/[-_]+/g, " ").trim();
+  }
+
+  function filesFromDrop(e) {
+    const items = e.dataTransfer && e.dataTransfer.files;
+    return items && items.length ? [...items] : [];
+  }
+
+  function isFileDrag(e) {
+    return e.dataTransfer && [...e.dataTransfer.types].includes("Files");
+  }
+
+  function wireDrop(el, onFiles) {
+    el.addEventListener("dragover", (e) => { if (!isFileDrag(e)) return; e.preventDefault(); el.classList.add("over"); });
+    el.addEventListener("dragenter", (e) => { if (!isFileDrag(e)) return; e.preventDefault(); el.classList.add("over"); });
+    el.addEventListener("dragleave", () => el.classList.remove("over"));
+    el.addEventListener("drop", (e) => {
+      if (!isFileDrag(e)) return;
+      e.preventDefault(); el.classList.remove("over");
+      const files = filesFromDrop(e);
+      if (files.length) onFiles(files);
     });
   }
 
@@ -370,7 +470,15 @@
       ta.value = item[f.key] || "";
       ta.oninput = () => { item[f.key] = ta.value; cache(); };
       w.appendChild(ta);
-      if (f.type === "markdown") { const h = document.createElement("div"); h.className = "hint"; h.textContent = "Markdown: ## Heading · **bold** · *italic* · - list · > quote · [text](url)"; w.appendChild(h); }
+      if (f.drop && f.drop.insert) wireMarkdownDrop(ta, item, f);
+      if (f.type === "markdown") {
+        const h = document.createElement("div"); h.className = "hint";
+        h.innerHTML = (f.drop && f.drop.insert ? "<b>Drag an image into the box</b> to embed it · " : "") +
+          "Markdown: ## Heading · **bold** · *italic* · - list · &gt; quote · [text](url)";
+        w.appendChild(h);
+      }
+    } else if (f.drop) {
+      appendMediaPath(w, item, f);
     } else if (f.type === "list") {
       const inp = document.createElement("input"); inp.type = "text";
       inp.value = (item[f.key] || []).join(", ");
@@ -400,6 +508,64 @@
       }
     }
     return w;
+  }
+
+  // Drop image(s) onto a Markdown textarea → copy to public/<dir>/ and insert ![](path) at the cursor.
+  function wireMarkdownDrop(ta, item, f) {
+    wireDrop(ta, async (all) => {
+      const files = all.filter((fl) => fl.type.startsWith("image/"));
+      if (!files.length) { toast("Only image files can be embedded here."); return; }
+      if (!dirHandle) { toast("Connect your site folder first (top-right) to drop images."); return; }
+      try {
+        const md = [];
+        for (const file of files) md.push("![" + altFromName(file.name) + "](" + (await saveMedia(file, f.drop.dir)) + ")");
+        insertAtCursor(ta, "\n\n" + md.join("\n\n") + "\n\n");
+        item[f.key] = ta.value; cache();
+        toast("Embedded " + files.length + " image" + (files.length > 1 ? "s" : "") + " — Save to site, then push.", 4200);
+      } catch (e) { toast(e.message || "Couldn't add image"); }
+    });
+  }
+
+  // A path field (project cover, research link) with a drop zone + click-to-choose + live thumbnail.
+  function appendMediaPath(w, item, f) {
+    const isImg = (f.drop.accept || "").includes("image");
+
+    const img = document.createElement("img"); img.className = "thumb"; w.appendChild(img);
+    if (isImg && item[f.key]) loadPreview(item[f.key], img);
+
+    const dz = document.createElement("div"); dz.className = "drop";
+    const dzHtml = '<span class="ico">⬆</span><b>Drop a file</b> or click to choose'
+      + '<br><span style="font-size:12px">saved into <code>public/' + f.drop.dir + '/</code></span>';
+    dz.innerHTML = dzHtml; w.appendChild(dz);
+
+    const row = document.createElement("div"); row.className = "media-row";
+    const inp = document.createElement("input"); inp.type = "text";
+    inp.placeholder = "/" + f.drop.dir + "/your-file"; inp.value = item[f.key] || "";
+    inp.oninput = () => { item[f.key] = inp.value; cache(); if (isImg) loadPreview(inp.value, img); };
+    row.appendChild(inp); w.appendChild(row);
+
+    const fileInput = document.createElement("input"); fileInput.type = "file";
+    fileInput.accept = f.drop.accept || ""; fileInput.style.display = "none"; w.appendChild(fileInput);
+
+    if (f.drop.hint) { const h = document.createElement("div"); h.className = "hint"; h.textContent = f.drop.hint; w.appendChild(h); }
+
+    async function take(files) {
+      const file = files[0]; if (!file) return;
+      if (item[f.key] && !confirm('Replace the current value with "' + file.name + '"?')) return;
+      dz.classList.add("busy"); dz.innerHTML = '<span class="ico">⏳</span>Saving ' + escapeHtml(file.name) + "…";
+      try {
+        const path = await saveMedia(file, f.drop.dir);
+        item[f.key] = path; cache(); inp.value = path;
+        if (isImg && file.type.startsWith("image/")) { img.src = URL.createObjectURL(file); img.style.display = "block"; }
+        else { img.style.display = "none"; }
+        toast("Added " + path + " — Save to site, then push to publish.", 4200);
+      } catch (e) { toast(e.message || "Couldn't add file"); }
+      finally { dz.classList.remove("busy"); dz.innerHTML = dzHtml; }
+    }
+
+    dz.onclick = () => fileInput.click();
+    fileInput.onchange = () => { if (fileInput.files.length) take([...fileInput.files]); fileInput.value = ""; };
+    wireDrop(dz, take);
   }
 
   function highlights(item) {
