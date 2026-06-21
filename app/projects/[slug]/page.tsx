@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProject, projects } from "@/app/lib/data";
 import { SubHeader } from "@/app/components/sub-header";
+import { PageFooter } from "@/app/components/page-footer";
 import { Brackets } from "@/app/components/orbital";
 import { Reveal } from "@/app/lib/motion";
 
@@ -154,6 +155,7 @@ export default async function ProjectPage({
           </Reveal>
         </article>
       </main>
+      <PageFooter />
     </>
   );
 }

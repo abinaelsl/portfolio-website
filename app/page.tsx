@@ -45,7 +45,7 @@ function Hero() {
       <div className="max-w-3xl mx-auto px-6 pt-12 pb-14">
         {/* Status strip */}
         <div className="mb-8 flex items-center justify-between">
-          <Label dot>Portfolio</Label>
+          <Label dot>Portfolio · @abinaelsl</Label>
           <span className="label text-faint hidden sm:inline">33.59°N / 130.21°E</span>
         </div>
 
@@ -326,7 +326,7 @@ function Footer() {
         </div>
         <div className="max-w-3xl mx-auto px-6 pb-8 flex items-end justify-between gap-4">
           <p className="label text-faint">
-            © {new Date().getFullYear()} · Abinael Sarungallo Lumempouw · Fukuoka, Japan
+            © {new Date().getFullYear()} Abinael Sarungallo Lumempouw · All rights reserved · @abinaelsl
           </p>
           <Barcode seed="ABINAEL-SL-2026" height={22} className="w-28 text-ink/60" />
         </div>

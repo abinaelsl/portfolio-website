@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPost, posts, formatDate } from "@/app/lib/data";
 import { SubHeader } from "@/app/components/sub-header";
+import { PageFooter } from "@/app/components/page-footer";
 import { Markdown } from "@/app/components/markdown";
 import { Reveal } from "@/app/lib/motion";
 
@@ -75,6 +76,7 @@ export default async function PostPage({
           </Reveal>
         </article>
       </main>
+      <PageFooter />
     </>
   );
 }

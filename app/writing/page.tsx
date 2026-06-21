@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { posts, formatDate } from "@/app/lib/data";
 import { SubHeader } from "@/app/components/sub-header";
+import { PageFooter } from "@/app/components/page-footer";
 import { Reveal } from "@/app/lib/motion";
 
 export const metadata: Metadata = {
@@ -54,6 +55,7 @@ export default function WritingIndex() {
           </div>
         </div>
       </main>
+      <PageFooter />
     </>
   );
 }

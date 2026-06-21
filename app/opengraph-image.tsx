@@ -36,7 +36,7 @@ export default function OpengraphImage() {
           }}
         >
           <div style={{ display: "flex" }}>// ABINAEL.XYZ</div>
-          <div style={{ display: "flex", color: "#6d5efc" }}>✦</div>
+          <div style={{ display: "flex", color: "#6d5efc" }}>@abinaelsl</div>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>

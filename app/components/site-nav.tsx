@@ -47,6 +47,7 @@ export function SiteNav() {
           <span className="font-heading text-sm font-extrabold uppercase tracking-[0.18em] text-ink">
             Abinael S.L.
           </span>
+          <span className="font-mono text-[10px] tracking-wider text-accent hidden sm:inline">@abinaelsl</span>
         </a>
         <div className="flex items-center gap-0.5 sm:gap-1">
           <nav className="flex items-center">
