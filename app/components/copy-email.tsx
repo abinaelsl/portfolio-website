@@ -22,9 +22,9 @@ export function CopyEmail({ className }: { className?: string }) {
       whileTap={{ scale: 0.97 }}
       title="Click to copy"
       className={`group inline-flex items-center gap-1.5 cursor-pointer
-                  text-indigo-600 dark:text-indigo-400 rounded-md
-                  hover:text-indigo-500 dark:hover:text-indigo-300 transition-colors
-                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/50 ${className ?? ""}`}
+                  font-mono text-accent rounded-md
+                  hover:opacity-80 transition-opacity
+                  focus-visible:outline-none ${className ?? ""}`}
     >
       <span className="underline-offset-4 group-hover:underline">{EMAIL}</span>
       <svg

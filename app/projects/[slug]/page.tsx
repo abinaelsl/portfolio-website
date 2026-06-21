@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProject, projects } from "@/app/lib/data";
 import { SubHeader } from "@/app/components/sub-header";
+import { Brackets } from "@/app/components/orbital";
 import { Reveal } from "@/app/lib/motion";
 
 export function generateStaticParams() {
@@ -48,13 +49,13 @@ export default async function ProjectPage({
       <main className="flex-1">
         <article className="max-w-3xl mx-auto px-6 pt-16 pb-20">
           <Reveal>
-            <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-indigo-600 dark:text-indigo-400">
+            <p className="label text-accent">
               {project.role} · {project.year}
             </p>
-            <h1 className="mt-3 font-display text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+            <h1 className="mt-3 font-display text-5xl sm:text-6xl uppercase tracking-tight text-ink">
               {project.name}
             </h1>
-            <p className="mt-3 text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+            <p className="mt-3 text-lg text-muted leading-relaxed">
               {project.tagline}
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-3">
@@ -63,10 +64,10 @@ export default async function ProjectPage({
                   href={project.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium
-                             bg-indigo-600 text-white hover:bg-indigo-500
-                             transition-colors duration-200
-                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/50 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-950"
+                  className="group inline-flex items-center gap-1.5 rounded-md px-4 py-2 font-heading text-xs font-bold uppercase tracking-[0.12em]
+                             bg-accent text-bg hover:opacity-90
+                             transition-all duration-200 active:scale-[0.98]
+                             focus-visible:outline-none"
                 >
                   Visit live
                   <span aria-hidden className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
@@ -74,21 +75,21 @@ export default async function ProjectPage({
                   </span>
                 </a>
               )}
-              <span className="font-mono text-xs px-2.5 py-1 rounded-full border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400">
+              <span className="font-mono text-xs uppercase tracking-wider px-2.5 py-1 rounded border border-line text-muted">
                 {project.status}
               </span>
             </div>
           </Reveal>
 
           <Reveal delay={0.05}>
-            <p className="mt-10 text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+            <p className="mt-10 text-lg text-ink/85 leading-relaxed">
               {project.overview}
             </p>
           </Reveal>
 
           {project.image && (
             <Reveal delay={0.08}>
-              <figure className="mt-10 overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800">
+              <figure className="relative mt-10 overflow-hidden rounded-[var(--radius-panel)] border border-line">
                 <Image
                   src={project.image}
                   alt={`${project.name} screenshot`}
@@ -97,33 +98,32 @@ export default async function ProjectPage({
                   sizes="(max-width: 768px) 100vw, 768px"
                   className="w-full h-auto"
                 />
+                <Brackets className="text-accent/50" />
               </figure>
             </Reveal>
           )}
 
-          <div className="mt-10 border-t border-gray-100 dark:border-gray-800 pt-8 space-y-7">
+          <div className="mt-10 border-t border-line pt-8 space-y-7">
             {project.highlights.map((h) => (
               <Reveal key={h.label}>
                 <div className="grid sm:grid-cols-[150px_1fr] gap-1.5 sm:gap-6">
-                  <p className="font-mono text-xs uppercase tracking-[0.14em] text-indigo-600 dark:text-indigo-400 pt-0.5">
+                  <p className="label text-accent pt-0.5">
                     {h.label}
                   </p>
-                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{h.detail}</p>
+                  <p className="text-ink/85 leading-relaxed">{h.detail}</p>
                 </div>
               </Reveal>
             ))}
           </div>
 
           <Reveal>
-            <div className="mt-10 border-t border-gray-100 dark:border-gray-800 pt-8">
-              <p className="font-mono text-xs uppercase tracking-[0.14em] text-gray-500 dark:text-gray-400 mb-3">
-                Stack
-              </p>
+            <div className="mt-10 border-t border-line pt-8">
+              <p className="label text-faint mb-3">Stack</p>
               <div className="flex flex-wrap gap-1.5">
                 {project.stack.map((s) => (
                   <span
                     key={s}
-                    className="font-mono text-[11px] px-2 py-0.5 rounded-md bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400"
+                    className="font-mono text-[11px] px-2 py-0.5 rounded border border-line text-muted"
                   >
                     {s}
                   </span>
@@ -133,10 +133,10 @@ export default async function ProjectPage({
           </Reveal>
 
           <Reveal>
-            <div className="mt-12 border-t border-gray-100 dark:border-gray-800 pt-8 flex items-center justify-between gap-4 text-sm">
+            <div className="mt-12 border-t border-line pt-8 flex items-center justify-between gap-4">
               <Link
                 href="/#projects"
-                className="group inline-flex items-center gap-1 font-medium text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/50"
+                className="label group inline-flex items-center gap-1 text-muted hover:text-accent transition-colors rounded-md focus-visible:outline-none"
               >
                 <span aria-hidden className="transition-transform duration-200 group-hover:-translate-x-0.5">←</span>
                 All projects
@@ -144,7 +144,7 @@ export default async function ProjectPage({
               {hasNext && (
                 <Link
                   href={`/projects/${next.slug}`}
-                  className="group inline-flex items-center gap-1 font-medium text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors text-right rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/50"
+                  className="label group inline-flex items-center gap-1 text-ink hover:text-accent transition-colors text-right rounded-md focus-visible:outline-none"
                 >
                   {next.name}
                   <span aria-hidden className="transition-transform duration-200 group-hover:translate-x-0.5">→</span>

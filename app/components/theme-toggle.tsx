@@ -28,12 +28,10 @@ export function ThemeToggle() {
     <button
       onClick={() => setTheme(isDark ? "light" : "dark")}
       aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
-      className="relative w-9 h-9 grid place-items-center rounded-lg overflow-hidden
-                 text-gray-500 dark:text-gray-400
-                 hover:bg-gray-100 dark:hover:bg-gray-800
-                 hover:text-indigo-600 dark:hover:text-indigo-400
+      className="relative w-9 h-9 grid place-items-center rounded-md overflow-hidden
+                 text-muted hover:bg-ink/5 hover:text-accent
                  transition-colors duration-200 cursor-pointer
-                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/50"
+                 focus-visible:outline-none"
     >
       <AnimatePresence mode="wait" initial={false}>
         <motion.span

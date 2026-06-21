@@ -16,37 +16,35 @@ export default function WritingIndex() {
     <>
       <SubHeader backHref="/" backLabel="Abinael S.L." />
       <main className="flex-1">
-        <div className="max-w-3xl mx-auto px-6 pt-16 pb-20">
+        <div className="max-w-3xl mx-auto px-6 pt-14 pb-20">
           <Reveal>
-            <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-indigo-600 dark:text-indigo-400">
-              Writing
-            </p>
-            <h1 className="mt-3 font-display text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+            <p className="label text-accent">// Transmission Log</p>
+            <h1 className="mt-3 font-display text-5xl sm:text-6xl uppercase tracking-tight text-ink">
               Notes &amp; essays
             </h1>
-            <p className="mt-3 text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+            <p className="mt-3 text-lg text-muted leading-relaxed">
               Occasional writing on net-zero building research, building software, and life in Japan.
             </p>
           </Reveal>
 
-          <div className="mt-10 border-t border-gray-100 dark:border-gray-800">
+          <div className="mt-10 border-t border-line">
             {sorted.map((post, i) => (
               <Reveal key={post.slug} delay={i * 0.06}>
                 <Link
                   href={`/writing/${post.slug}`}
-                  className="group block border-b border-gray-100 dark:border-gray-800 py-6
-                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/50 rounded-md"
+                  className="group block border-b border-line py-6
+                             focus-visible:outline-none rounded-md"
                 >
-                  <time className="font-mono text-xs text-gray-500 dark:text-gray-400 tabular-nums">
+                  <time className="font-mono text-xs text-faint tabular-nums">
                     {formatDate(post.date)}
                   </time>
-                  <h2 className="mt-1.5 font-display text-xl font-semibold text-gray-900 dark:text-gray-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                  <h2 className="mt-1.5 font-heading text-xl font-bold text-ink group-hover:text-accent transition-colors">
                     {post.title}
                   </h2>
-                  <p className="mt-1.5 text-gray-600 dark:text-gray-400 leading-relaxed">
+                  <p className="mt-1.5 text-muted leading-relaxed">
                     {post.summary}
                   </p>
-                  <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-indigo-600 dark:text-indigo-400">
+                  <span className="label mt-3 inline-flex items-center gap-1 text-accent">
                     Read
                     <span aria-hidden className="transition-transform duration-200 group-hover:translate-x-0.5">→</span>
                   </span>

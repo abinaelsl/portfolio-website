@@ -11,14 +11,13 @@ export function SubHeader({
   backLabel?: string;
 }) {
   return (
-    <header className="sticky top-0 z-50 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md border-b border-gray-100 dark:border-gray-800/80">
+    <header className="sticky top-0 z-50 bg-bg/80 backdrop-blur-md border-b border-line">
       <div className="max-w-3xl mx-auto px-6 h-14 flex items-center justify-between">
         <Link
           href={backHref}
-          className="group inline-flex items-center gap-1.5 text-sm font-medium
-                     text-gray-600 dark:text-gray-400
-                     hover:text-gray-900 dark:hover:text-gray-100 transition-colors
-                     rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/50"
+          className="label group inline-flex items-center gap-1.5
+                     text-muted hover:text-ink transition-colors
+                     rounded-md focus-visible:outline-none"
         >
           <span aria-hidden className="transition-transform duration-200 group-hover:-translate-x-0.5">
             &larr;

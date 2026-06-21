@@ -16,10 +16,9 @@ export function SocialRow({ className }: { className?: string }) {
           whileHover={{ scale: 1.18, y: -2 }}
           whileTap={{ scale: 0.9 }}
           transition={{ type: "spring", stiffness: 400, damping: 17 }}
-          className="text-gray-500 dark:text-gray-400
-                     hover:text-indigo-600 dark:hover:text-indigo-400
+          className="text-muted hover:text-accent
                      transition-colors duration-150 cursor-pointer rounded-md
-                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/50"
+                     focus-visible:outline-none"
         >
           {s.icon}
         </motion.a>

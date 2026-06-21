@@ -1,12 +1,19 @@
 import type { Metadata } from "next";
-import { Archivo, Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Anton, Archivo, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import Providers from "./components/Providers";
+import { Grain } from "./components/orbital";
 import "./globals.css";
+
+const poster = Anton({
+  variable: "--ff-anton",
+  subsets: ["latin"],
+  weight: "400",
+});
 
 const display = Archivo({
   variable: "--ff-display",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800", "900"],
 });
 
 const body = Space_Grotesk({
@@ -61,10 +68,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${display.variable} ${body.variable} ${mono.variable} h-full antialiased`}
+      className={`${poster.variable} ${display.variable} ${body.variable} ${mono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+      <body className="min-h-full flex flex-col bg-bg text-ink">
+        <Grain />
         <Providers>{children}</Providers>
       </body>
     </html>

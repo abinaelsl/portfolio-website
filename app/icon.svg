@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Abinael S.L.">
+  <rect x="2" y="2" width="60" height="60" rx="15" fill="#0a0a0c" stroke="#6d5efc" stroke-width="1.5"/>
+  <ellipse cx="32" cy="34" rx="24" ry="8" transform="rotate(-20 32 34)" fill="none" stroke="#6d5efc" stroke-width="2"/>
+  <g fill="none" stroke="#f3f3f5" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 46 L32 17 L44 46"/>
+    <path d="M25 37 H39"/>
+  </g>
+  <circle cx="51" cy="26" r="2.4" fill="#f3f3f5"/>
+</svg>

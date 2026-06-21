@@ -3,12 +3,57 @@
 /* Class-based dark mode for next-themes */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Map the next/font CSS variables to Tailwind's font tokens so the
-   font-sans / font-display / font-mono utilities use them. */
+/* ------------------------------------------------------------------ *
+ *  ORBITAL — shared spacefaring command-center design language.
+ *  Semantic tokens reference runtime CSS vars so utilities like
+ *  bg-surface / text-muted / border-line / text-accent switch theme.
+ * ------------------------------------------------------------------ */
 @theme inline {
   --font-sans: var(--ff-body), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--ff-display), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--ff-anton), var(--ff-display), ui-sans-serif, sans-serif;
+  --font-heading: var(--ff-display), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--ff-mono), ui-monospace, SFMono-Regular, monospace;
+
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+
+  --radius-panel: 0.875rem;
+}
+
+:root {
+  /* Light = "blueprint / paper" variant */
+  --bg: #ece9e0;
+  --surface: #f5f3ec;
+  --surface-2: #e4e1d6;
+  --line: rgba(20, 18, 12, 0.16);
+  --line-strong: rgba(20, 18, 12, 0.38);
+  --ink: #14130d;
+  --muted: #57544a;
+  --faint: #8b8779;
+  --accent: #5341e6;
+  --accent-soft: rgba(83, 65, 230, 0.12);
+}
+
+.dark {
+  /* Dark = "orbital command center" (default) */
+  --bg: #050506;
+  --surface: #0a0a0c;
+  --surface-2: #111115;
+  --line: rgba(255, 255, 255, 0.12);
+  --line-strong: rgba(255, 255, 255, 0.28);
+  --ink: #f3f3f5;
+  --muted: #9a9aa3;
+  --faint: #585861;
+  --accent: #6d5efc;
+  --accent-soft: rgba(109, 94, 252, 0.16);
 }
 
 html {
@@ -22,19 +67,46 @@ html {
 
 body {
   font-family: var(--font-sans);
+  background-color: var(--bg);
+  color: var(--ink);
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-display);
+  font-family: var(--font-heading);
 }
 
 ::selection {
-  background-color: color-mix(in oklab, var(--color-indigo-500) 22%, transparent);
+  background-color: color-mix(in oklab, var(--accent) 30%, transparent);
 }
 
-/* Respect reduced-motion at the platform level too (motion handles components). */
+*:focus-visible {
+  outline: 1.5px solid var(--accent);
+  outline-offset: 2px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+}
+
+@layer utilities {
+  .tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+  .label {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-size: 0.6875rem;
+    line-height: 1;
+    color: var(--muted);
+  }
+  .hud-grid {
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 32px 32px;
   }
 }

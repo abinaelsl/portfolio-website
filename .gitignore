@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local reference mockups (design refs dropped in the repo root — not part of the site)
+/im_*_elements_for_my_website.png

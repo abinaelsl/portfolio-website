@@ -14,36 +14,41 @@ export default function OpengraphImage() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          padding: "80px",
-          background: "#0a0a12",
+          padding: "72px",
+          background: "#050506",
           backgroundImage:
-            "radial-gradient(900px 500px at 80% -10%, rgba(99,102,241,0.35), transparent 60%), radial-gradient(700px 500px at 0% 120%, rgba(99,102,241,0.18), transparent 55%)",
-          color: "#f5f5f7",
+            "radial-gradient(900px 600px at 88% -15%, rgba(109,94,252,0.32), transparent 60%), linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)",
+          backgroundSize: "auto, 48px 48px, 48px 48px",
+          color: "#f3f3f5",
           fontFamily: "sans-serif",
+          border: "1px solid rgba(255,255,255,0.10)",
         }}
       >
         <div
           style={{
             display: "flex",
             alignItems: "center",
+            justifyContent: "space-between",
             fontSize: 22,
             letterSpacing: 6,
             textTransform: "uppercase",
-            color: "#a5b4fc",
+            color: "#9a9aa3",
           }}
         >
-          abinael.xyz
+          <div style={{ display: "flex" }}>// ABINAEL.XYZ</div>
+          <div style={{ display: "flex", color: "#6d5efc" }}>✦</div>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div
             style={{
               display: "flex",
-              fontSize: 84,
-              fontWeight: 700,
-              lineHeight: 1.02,
-              letterSpacing: -2,
-              maxWidth: 980,
+              fontSize: 96,
+              fontWeight: 900,
+              lineHeight: 0.95,
+              letterSpacing: -3,
+              textTransform: "uppercase",
+              maxWidth: 1000,
             }}
           >
             Abinael Sarungallo Lumempouw
@@ -51,9 +56,11 @@ export default function OpengraphImage() {
           <div
             style={{
               display: "flex",
-              marginTop: 28,
-              fontSize: 30,
-              color: "#a1a1aa",
+              marginTop: 30,
+              fontSize: 28,
+              letterSpacing: 4,
+              textTransform: "uppercase",
+              color: "#9a9aa3",
             }}
           >
             Student · Founder · Researcher
@@ -68,10 +75,10 @@ export default function OpengraphImage() {
                 display: "flex",
                 fontSize: 22,
                 padding: "10px 20px",
-                borderRadius: 999,
-                border: "1px solid rgba(165,180,252,0.4)",
-                color: "#c7d2fe",
-                background: "rgba(99,102,241,0.08)",
+                borderRadius: 8,
+                border: "1px solid rgba(109,94,252,0.45)",
+                color: "#c4bdff",
+                background: "rgba(109,94,252,0.10)",
               }}
             >
               {tag}

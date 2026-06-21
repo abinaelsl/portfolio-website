@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { ThemeToggle } from "./theme-toggle";
+import { IconSaturn } from "./orbital";
 
 const sections = [
   { id: "about", label: "About" },
@@ -36,14 +37,16 @@ export function SiteNav() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md border-b border-gray-100 dark:border-gray-800/80">
+    <header className="sticky top-0 z-50 bg-bg/80 backdrop-blur-md border-b border-line">
       <div className="max-w-3xl mx-auto px-6 h-14 flex items-center justify-between gap-2">
         <a
           href="#top"
-          className="font-display font-semibold text-sm tracking-tight text-gray-900 dark:text-gray-100
-                     rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/50"
+          className="group inline-flex items-center gap-2 rounded-md focus-visible:outline-none"
         >
-          Abinael S.L.
+          <IconSaturn className="h-4 w-4 text-accent transition-transform group-hover:rotate-12" />
+          <span className="font-heading text-sm font-extrabold uppercase tracking-[0.18em] text-ink">
+            Abinael S.L.
+          </span>
         </a>
         <div className="flex items-center gap-0.5 sm:gap-1">
           <nav className="flex items-center">
@@ -54,18 +57,17 @@ export function SiteNav() {
                   key={s.id}
                   href={`#${s.id}`}
                   aria-current={isActive ? "true" : undefined}
-                  className="relative px-2 sm:px-3 py-1.5 text-[13px] sm:text-sm rounded-md transition-colors
-                             text-gray-500 dark:text-gray-400
-                             hover:text-gray-900 dark:hover:text-gray-100
-                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/50"
+                  className="label relative px-2 sm:px-3 py-2 rounded-md transition-colors
+                             text-muted hover:text-ink
+                             focus-visible:outline-none"
                 >
-                  <span className={isActive ? "text-indigo-600 dark:text-indigo-400 font-medium" : ""}>
+                  <span className={isActive ? "text-accent" : ""}>
                     {s.label}
                   </span>
                   {isActive && (
                     <motion.span
                       layoutId={reduce ? undefined : "nav-active"}
-                      className="absolute left-2 right-2 sm:left-3 sm:right-3 -bottom-px h-[1.5px] rounded-full bg-indigo-500 dark:bg-indigo-400"
+                      className="absolute left-2 right-2 sm:left-3 sm:right-3 -bottom-px h-[1.5px] bg-accent"
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}

@@ -45,28 +45,28 @@ export default async function PostPage({
       <main className="flex-1">
         <article className="max-w-2xl mx-auto px-6 pt-16 pb-20">
           <Reveal>
-            <time className="font-mono text-xs uppercase tracking-[0.14em] text-indigo-600 dark:text-indigo-400 tabular-nums">
+            <time className="label text-accent tabular-nums">
               {formatDate(post.date)}
             </time>
-            <h1 className="mt-3 font-display text-3xl sm:text-4xl font-bold tracking-tight leading-[1.1] text-gray-900 dark:text-gray-100">
+            <h1 className="mt-3 font-display text-4xl sm:text-5xl uppercase tracking-tight leading-[0.95] text-ink">
               {post.title}
             </h1>
-            <p className="mt-3 text-lg text-gray-500 dark:text-gray-400 leading-relaxed">
+            <p className="mt-3 text-lg text-muted leading-relaxed">
               {post.summary}
             </p>
           </Reveal>
 
           <Reveal delay={0.05}>
-            <div className="mt-8 border-t border-gray-100 dark:border-gray-800 pt-6 text-base">
+            <div className="mt-8 border-t border-line pt-6 text-base">
               <Markdown>{post.body}</Markdown>
             </div>
           </Reveal>
 
           <Reveal>
-            <div className="mt-12 border-t border-gray-100 dark:border-gray-800 pt-8 text-sm">
+            <div className="mt-12 border-t border-line pt-8">
               <Link
                 href="/writing"
-                className="group inline-flex items-center gap-1 font-medium text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/50"
+                className="label group inline-flex items-center gap-1 text-muted hover:text-accent transition-colors rounded-md focus-visible:outline-none"
               >
                 <span aria-hidden className="transition-transform duration-200 group-hover:-translate-x-0.5">←</span>
                 All writing
