@@ -1,5 +1,29 @@
 [
   {
+    "slug": "offline-personal-assistant",
+    "name": "Offline Personal Assistant (Hermes)",
+    "tagline": "Hermes Agent Running on Personal PC using local LLM (qwen3.5:9b)",
+    "description": "",
+    "href": "https://youtu.be/kxLJBFVZIj8?si=dQ73LD0S7E-Pw0ww",
+    "image": "",
+    "year": "2026",
+    "role": "",
+    "status": "Completed",
+    "tags": [],
+    "stack": [
+      "Python 3.11",
+      "Node.js",
+      "React",
+      "TypeScript",
+      "SQLite",
+      "YAML",
+      "React",
+      "Electron"
+    ],
+    "overview": "",
+    "highlights": []
+  },
+  {
     "slug": "statusmaxx",
     "name": "StatusMaxx",
     "tagline": "QREC grant winner · applying for YC Fall 2026.",
