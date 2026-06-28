@@ -2,14 +2,19 @@
   {
     "slug": "offline-personal-assistant",
     "name": "Offline Personal Assistant (Hermes)",
-    "tagline": "Hermes Agent Running on Personal PC using local LLM (qwen3.5:9b)",
-    "description": "",
+    "tagline": "Hermes Agent running on a personal PC with a local LLM (qwen3.5:9b).",
+    "description": "A desktop personal assistant that runs entirely on local hardware — no cloud API calls. Hermes handles tasks, remembers context in SQLite, and is driven by qwen3.5:9b through a React + Electron shell with a Python backend.",
     "href": "https://youtu.be/kxLJBFVZIj8?si=dQ73LD0S7E-Pw0ww",
     "image": "",
     "year": "2026",
-    "role": "",
+    "role": "Solo builder",
     "status": "Completed",
-    "tags": [],
+    "tags": [
+      "Local LLM",
+      "Electron",
+      "Python",
+      "Offline-first"
+    ],
     "stack": [
       "Python 3.11",
       "Node.js",
@@ -17,11 +22,23 @@
       "TypeScript",
       "SQLite",
       "YAML",
-      "React",
       "Electron"
     ],
-    "overview": "",
-    "highlights": []
+    "overview": "Most AI assistants send every prompt to a remote API. Hermes goes the other way: a local qwen3.5:9b model on a personal PC, wrapped in an Electron desktop app with a Python backend and SQLite for persistent memory. The goal was a useful daily assistant that stays private, works offline, and costs nothing per query.",
+    "highlights": [
+      {
+        "label": "Problem",
+        "detail": "Cloud assistants are convenient but leak context, need connectivity, and rack up API costs for always-on use."
+      },
+      {
+        "label": "Approach",
+        "detail": "A Hermes agent loop backed by qwen3.5:9b locally, with YAML-configured tools, SQLite memory, and a React + Electron UI for day-to-day interaction."
+      },
+      {
+        "label": "Outcome",
+        "detail": "A working offline assistant demo — private, self-hosted, and runnable entirely on personal hardware. Walkthrough on YouTube."
+      }
+    ]
   },
   {
     "slug": "statusmaxx",

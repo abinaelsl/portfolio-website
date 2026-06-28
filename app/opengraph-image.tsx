@@ -35,7 +35,7 @@ export default function OpengraphImage() {
             color: "#9a9aa3",
           }}
         >
-          <div style={{ display: "flex" }}>// ABINAEL.XYZ</div>
+          <div style={{ display: "flex" }}>{`// ABINAEL.XYZ`}</div>
           <div style={{ display: "flex", color: "#6d5efc" }}>@abinaelsl</div>
         </div>
 
