@@ -1,3 +1,4 @@
+import { safeHref } from "@/app/lib/safe-href";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -23,7 +24,7 @@ export function Markdown({ children }: { children: string }) {
         ),
         a: ({ href, children }) => (
           <a
-            href={href}
+            href={safeHref(href)}
             target="_blank"
             rel="noopener noreferrer"
             className="text-accent underline underline-offset-4 hover:opacity-80 transition-opacity"

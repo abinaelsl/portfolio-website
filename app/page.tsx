@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
 import avatar from "@/public/avatar.jpg";
 import { research, projects, channels, posts, formatDate } from "@/app/lib/data";
+import { safeHref } from "@/app/lib/safe-href";
 import { Reveal, Stagger, StaggerItem } from "@/app/lib/motion";
 import { SiteNav } from "@/app/components/site-nav";
 import { SocialRow } from "@/app/components/social-row";
@@ -137,7 +138,7 @@ function Research() {
         {research.map((p, i) => (
           <Reveal key={p.title} delay={i * 0.06}>
             <a
-              href={p.href}
+              href={safeHref(p.href)}
               target="_blank"
               rel="noopener noreferrer"
               className="group block pl-4 border-l-2 border-line
@@ -192,7 +193,7 @@ function Projects() {
                 </div>
                 {p.href !== "#" && (
                   <a
-                    href={p.href}
+                    href={safeHref(p.href)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="label shrink-0 inline-flex items-center gap-1
@@ -286,7 +287,7 @@ function Content() {
         {channels.map((c, i) => (
           <Reveal key={c.platform} delay={i * 0.06}>
             <a
-              href={c.href}
+              href={safeHref(c.href)}
               target="_blank"
               rel="noopener noreferrer"
               className="group block rounded-[var(--radius-panel)] border border-line bg-surface/60 backdrop-blur-sm p-4 h-full

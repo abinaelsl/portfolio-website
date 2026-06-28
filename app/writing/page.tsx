@@ -19,7 +19,7 @@ export default function WritingIndex() {
       <main className="flex-1">
         <div className="max-w-3xl mx-auto px-6 pt-14 pb-20">
           <Reveal>
-            <p className="label text-accent">// Transmission Log</p>
+            <p className="label text-accent">{`// Transmission Log`}</p>
             <h1 className="mt-3 font-display text-5xl sm:text-6xl uppercase tracking-tight text-ink">
               Notes &amp; essays
             </h1>

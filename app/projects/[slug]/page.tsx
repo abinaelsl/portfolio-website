@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProject, projects } from "@/app/lib/data";
+import { safeHref } from "@/app/lib/safe-href";
 import { SubHeader } from "@/app/components/sub-header";
 import { PageFooter } from "@/app/components/page-footer";
 import { Brackets } from "@/app/components/orbital";
@@ -62,7 +63,7 @@ export default async function ProjectPage({
             <div className="mt-6 flex flex-wrap items-center gap-3">
               {project.href !== "#" && (
                 <a
-                  href={project.href}
+                  href={safeHref(project.href)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group inline-flex items-center gap-1.5 rounded-md px-4 py-2 font-heading text-xs font-bold uppercase tracking-[0.12em]
