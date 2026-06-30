@@ -53,7 +53,7 @@ export function contentFilePath(type: ContentType): string {
 }
 
 export function mediaPublicPath(directory: MediaDirectory, filename: string): string {
-  return `/public/${directory}/${filename}`;
+  return `public/${directory}/${filename}`;
 }
 
 export function mediaSitePath(directory: MediaDirectory, filename: string): string {

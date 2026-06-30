@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { requireHermesAuth } from "@/app/lib/hermes/auth";
 import { getContentItem, updateContentItem } from "@/app/lib/hermes/content";
 import {
+  decodeBase64Payload,
   saveMediaFile,
   uniqueFilename,
   validateMediaUpload,
@@ -25,6 +26,10 @@ type JsonUploadBody = {
   };
 };
 
+function deployWarning(deploy: { triggered: boolean; warning?: string }) {
+  return deploy.warning ? { deploy } : {};
+}
+
 async function handleUpload(
   directory: MediaDirectory,
   originalName: string,
@@ -43,13 +48,16 @@ async function handleUpload(
 
   const response: Record<string, unknown> = {
     ok: true,
-    ...saved,
+    path: saved.path,
+    filename: saved.filename,
+    directory: saved.directory,
     markdown: `![${originalName.replace(/\.[^.]+$/, "")}](${saved.path})`,
+    ...deployWarning(saved.deploy),
   };
 
   if (attach) {
     if (attach.contentType === "projects") {
-      const item = await updateContentItem(
+      const { item } = await updateContentItem(
         "projects",
         attach.id,
         { image: saved.path },
@@ -58,7 +66,7 @@ async function handleUpload(
       response.attached = { contentType: "projects", id: attach.id, field: "image", item };
     } else if (attach.contentType === "research") {
       const field = attach.field || "href";
-      const item = await updateContentItem(
+      const { item } = await updateContentItem(
         "research",
         attach.id,
         { [field]: saved.path },
@@ -73,7 +81,7 @@ async function handleUpload(
       const alt = attach.markdownAlt || originalName.replace(/\.[^.]+$/, "");
       const post = found.item as Post;
       const embed = `\n\n![${alt}](${saved.path})\n\n`;
-      const item = await updateContentItem(
+      const { item } = await updateContentItem(
         "posts",
         attach.id,
         { body: `${post.body || ""}${embed}` },
@@ -90,62 +98,73 @@ export async function POST(request: Request) {
   const authError = requireHermesAuth(request);
   if (authError) return authError;
 
-  const contentType = request.headers.get("content-type") || "";
-
-  if (contentType.includes("multipart/form-data")) {
-    const form = await request.formData();
-    const directory = String(form.get("directory") || "");
-    const file = form.get("file");
-
-    if (!(file instanceof File)) {
-      return NextResponse.json({ error: "multipart body must include a `file` field." }, { status: 400 });
-    }
-
-    const attachRaw = form.get("attach");
-    let attach: JsonUploadBody["attach"];
-    if (typeof attachRaw === "string" && attachRaw.trim()) {
-      try {
-        attach = JSON.parse(attachRaw);
-      } catch {
-        return NextResponse.json({ error: "Invalid JSON in `attach` field." }, { status: 400 });
-      }
-    }
-
-    const bytes = new Uint8Array(await file.arrayBuffer());
-    return handleUpload(
-      directory as MediaDirectory,
-      file.name,
-      bytes,
-      file.type || "application/octet-stream",
-      String(form.get("commitMessage") || ""),
-      attach,
-    );
-  }
-
-  let body: JsonUploadBody;
   try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
-  }
+    const contentType = request.headers.get("content-type") || "";
 
-  if (!body.directory || !body.contentBase64) {
+    if (contentType.includes("multipart/form-data")) {
+      const form = await request.formData();
+      const directory = String(form.get("directory") || "");
+      const file = form.get("file");
+
+      if (!(file instanceof File)) {
+        return NextResponse.json(
+          { error: "multipart body must include a `file` field." },
+          { status: 400 },
+        );
+      }
+
+      const attachRaw = form.get("attach");
+      let attach: JsonUploadBody["attach"];
+      if (typeof attachRaw === "string" && attachRaw.trim()) {
+        try {
+          attach = JSON.parse(attachRaw);
+        } catch {
+          return NextResponse.json({ error: "Invalid JSON in `attach` field." }, { status: 400 });
+        }
+      }
+
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      return await handleUpload(
+        directory as MediaDirectory,
+        file.name,
+        bytes,
+        file.type || "application/octet-stream",
+        String(form.get("commitMessage") || ""),
+        attach,
+      );
+    }
+
+    let body: JsonUploadBody;
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
+    }
+
+    if (!body.directory || !body.contentBase64) {
+      return NextResponse.json(
+        { error: "Body must include `directory` and `contentBase64`." },
+        { status: 400 },
+      );
+    }
+
+    const bytes = decodeBase64Payload(body.contentBase64);
+    const originalName = body.filename || `upload-${Date.now()}`;
+    const mimeType = body.mimeType || "application/octet-stream";
+
+    return await handleUpload(
+      body.directory as MediaDirectory,
+      originalName,
+      bytes,
+      mimeType,
+      body.commitMessage,
+      body.attach,
+    );
+  } catch (error) {
+    console.error("Hermes media upload failed:", error);
     return NextResponse.json(
-      { error: "JSON body must include `directory` and `contentBase64`." },
-      { status: 400 },
+      { error: error instanceof Error ? error.message : "Media upload failed." },
+      { status: 500 },
     );
   }
-
-  const bytes = Uint8Array.from(Buffer.from(body.contentBase64, "base64"));
-  const originalName = body.filename || `upload-${Date.now()}`;
-  const mimeType = body.mimeType || "application/octet-stream";
-
-  return handleUpload(
-    body.directory as MediaDirectory,
-    originalName,
-    bytes,
-    mimeType,
-    body.commitMessage,
-    body.attach,
-  );
 }

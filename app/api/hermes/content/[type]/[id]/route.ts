@@ -59,13 +59,19 @@ export async function PATCH(request: Request, context: RouteContext) {
   }
 
   try {
-    const item = await updateContentItem(
+    const { item, deploy } = await updateContentItem(
       contentType,
       decodeURIComponent(id),
       body.patch,
       body.commitMessage,
     );
-    return NextResponse.json({ ok: true, type: contentType, id: decodeURIComponent(id), item });
+    return NextResponse.json({
+      ok: true,
+      type: contentType,
+      id: decodeURIComponent(id),
+      item,
+      ...(deploy.warning ? { deploy } : {}),
+    });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Failed to update item.";
     const status = message.includes("not found") ? 404 : 400;
@@ -92,8 +98,14 @@ export async function DELETE(request: Request, context: RouteContext) {
   }
 
   try {
-    const item = await deleteContentItem(contentType, decodeURIComponent(id), commitMessage);
-    return NextResponse.json({ ok: true, type: contentType, id: decodeURIComponent(id), item });
+    const { item, deploy } = await deleteContentItem(contentType, decodeURIComponent(id), commitMessage);
+    return NextResponse.json({
+      ok: true,
+      type: contentType,
+      id: decodeURIComponent(id),
+      item,
+      ...(deploy.warning ? { deploy } : {}),
+    });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Failed to delete item.";
     const status = message.includes("not found") ? 404 : 400;
