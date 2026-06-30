@@ -1,0 +1,118 @@
+# Hermes tools for abinael.xyz portfolio CMS
+# Copy these into your Hermes agent YAML tool config.
+#
+# Required env vars for Hermes:
+#   PORTFOLIO_SITE_URL: https://abinael.xyz
+#   PORTFOLIO_API_KEY: <same value as HERMES_API_KEY on Vercel>
+
+tools:
+  portfolio_discover:
+    description: >
+      Fetch the portfolio CMS schema, endpoints, and media rules.
+      Call once at startup or when you need field names.
+    method: GET
+    url: "${PORTFOLIO_SITE_URL}/api/hermes"
+    headers:
+      Authorization: "Bearer ${PORTFOLIO_API_KEY}"
+
+  portfolio_list_projects:
+    description: List all portfolio projects with full JSON content.
+    method: GET
+    url: "${PORTFOLIO_SITE_URL}/api/hermes/content/projects"
+    headers:
+      Authorization: "Bearer ${PORTFOLIO_API_KEY}"
+
+  portfolio_update_project:
+    description: >
+      Partially update one project by slug. Use for text changes, tags, stack,
+      highlights, status, links, or setting image to an existing /projects/... path.
+    method: PATCH
+    url: "${PORTFOLIO_SITE_URL}/api/hermes/content/projects/{slug}"
+    headers:
+      Authorization: "Bearer ${PORTFOLIO_API_KEY}"
+      Content-Type: application/json
+    body:
+      patch: "{patch_object}"
+      commitMessage: "chore(hermes): update project {slug}"
+
+  portfolio_list_posts:
+    description: List all writing posts (Markdown bodies included).
+    method: GET
+    url: "${PORTFOLIO_SITE_URL}/api/hermes/content/posts"
+    headers:
+      Authorization: "Bearer ${PORTFOLIO_API_KEY}"
+
+  portfolio_update_post:
+    description: Partially update a writing post by slug (title, summary, date, body markdown).
+    method: PATCH
+    url: "${PORTFOLIO_SITE_URL}/api/hermes/content/posts/{slug}"
+    headers:
+      Authorization: "Bearer ${PORTFOLIO_API_KEY}"
+      Content-Type: application/json
+    body:
+      patch: "{patch_object}"
+
+  portfolio_list_research:
+    description: List research paper entries from the home page research section.
+    method: GET
+    url: "${PORTFOLIO_SITE_URL}/api/hermes/content/research"
+    headers:
+      Authorization: "Bearer ${PORTFOLIO_API_KEY}"
+
+  portfolio_add_research:
+    description: Add a new research entry.
+    method: POST
+    url: "${PORTFOLIO_SITE_URL}/api/hermes/content/research"
+    headers:
+      Authorization: "Bearer ${PORTFOLIO_API_KEY}"
+      Content-Type: application/json
+    body:
+      item:
+        title: "{title}"
+        authors: "Abinael Sarungallo Lumempouw"
+        venue: "{venue}"
+        href: "{href}"
+        tags: []
+
+  portfolio_upload_media:
+    description: >
+      Upload an image or PDF to the site. Use directory "projects" for cover shots,
+      "writing" for post images, "research" for hosted PDFs/images.
+      Optionally attach to a content item in the same request.
+    method: POST
+    url: "${PORTFOLIO_SITE_URL}/api/hermes/media"
+    headers:
+      Authorization: "Bearer ${PORTFOLIO_API_KEY}"
+      Content-Type: application/json
+    body:
+      directory: "{projects|writing|research}"
+      filename: "{original-filename.png}"
+      mimeType: "{image/png|image/jpeg|application/pdf}"
+      contentBase64: "{base64_bytes}"
+      attach:
+        contentType: "{projects|posts|research}"
+        id: "{slug_or_index}"
+        markdownAlt: "{optional alt text for posts}"
+
+  portfolio_upload_project_cover:
+    description: >
+      Upload a photo and set it as the cover image for a project.
+      Example id: offline-personal-assistant (Hermes project currently has no cover).
+    method: POST
+    url: "${PORTFOLIO_SITE_URL}/api/hermes/media"
+    headers:
+      Authorization: "Bearer ${PORTFOLIO_API_KEY}"
+      Content-Type: application/json
+    body:
+      directory: projects
+      filename: "{filename}"
+      mimeType: image/png
+      contentBase64: "{base64_bytes}"
+      attach:
+        contentType: projects
+        id: "{project_slug}"
+
+notes:
+  - Hermes project slug is `offline-personal-assistant` and its `image` field is currently empty.
+  - After GitHub commits, the live site updates when Vercel redeploys (use VERCEL_DEPLOY_HOOK_URL).
+  - For text-only edits, PATCH is safer than replacing the whole collection.
