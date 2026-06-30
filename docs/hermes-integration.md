@@ -20,7 +20,7 @@ In the Vercel project for `portfolio-website`, add:
 | `GITHUB_TOKEN` | Yes (production) | GitHub PAT with `repo` scope to commit content |
 | `GITHUB_REPO` | Yes (production) | `abinaelsl/portfolio-website` |
 | `GITHUB_BRANCH` | No | Defaults to `main` |
-| `VERCEL_DEPLOY_HOOK_URL` | Recommended | Triggers a redeploy after each content commit |
+| `VERCEL_DEPLOY_HOOK_URL` | Optional | Full `https://...` deploy hook URL from Vercel → Settings → Git → Deploy Hooks (not the instruction text) |
 
 ### GitHub token
 

@@ -56,8 +56,14 @@ export async function PUT(request: Request, context: RouteContext) {
   }
 
   try {
-    const items = await replaceContent(contentType, body.items, body.commitMessage);
-    return NextResponse.json({ ok: true, type: contentType, count: items.length, items });
+    const { items, deploy } = await replaceContent(contentType, body.items, body.commitMessage);
+    return NextResponse.json({
+      ok: true,
+      type: contentType,
+      count: items.length,
+      items,
+      ...(deploy.warning ? { deploy } : {}),
+    });
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Failed to replace content." },
@@ -88,8 +94,11 @@ export async function POST(request: Request, context: RouteContext) {
   }
 
   try {
-    const item = await createContentItem(contentType, body.item, body.commitMessage);
-    return NextResponse.json({ ok: true, type: contentType, item }, { status: 201 });
+    const { item, deploy } = await createContentItem(contentType, body.item, body.commitMessage);
+    return NextResponse.json(
+      { ok: true, type: contentType, item, ...(deploy.warning ? { deploy } : {}) },
+      { status: 201 },
+    );
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Failed to create item." },

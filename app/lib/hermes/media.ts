@@ -5,7 +5,12 @@ import {
   mediaSitePath,
   type MediaDirectory,
 } from "./types";
-import { isGitHubPersistenceEnabled, readGitHubFile, writeGitHubFile } from "./github";
+import {
+  getGitHubFileMeta,
+  isGitHubPersistenceEnabled,
+  triggerDeployHook,
+  writeGitHubFile,
+} from "./github";
 import { writeLocalFile } from "./local";
 
 const MAX_MEDIA_BYTES = 4 * 1024 * 1024;
@@ -56,9 +61,18 @@ export function validateMediaUpload(
   return { directory };
 }
 
-async function fileExistsInGitHub(filePath: string): Promise<boolean> {
-  const { content } = await readGitHubFile(filePath);
-  return content.length > 0;
+export function decodeBase64Payload(input: string): Uint8Array {
+  const cleaned = input.trim().replace(/^data:[^;]+;base64,/, "").replace(/\s/g, "");
+  if (!cleaned) {
+    throw new Error("contentBase64 is empty.");
+  }
+
+  const buffer = Buffer.from(cleaned, "base64");
+  if (buffer.length === 0) {
+    throw new Error("contentBase64 did not decode to any bytes.");
+  }
+
+  return Uint8Array.from(buffer);
 }
 
 async function fileExistsLocally(filePath: string): Promise<boolean> {
@@ -83,7 +97,7 @@ export async function uniqueFilename(
     const candidate = attempt === 0 ? `${base}${ext}` : `${base}-${attempt}${ext}`;
     const filePath = mediaPublicPath(directory, candidate);
     const exists = isGitHubPersistenceEnabled()
-      ? await fileExistsInGitHub(filePath)
+      ? (await getGitHubFileMeta(filePath)).exists
       : await fileExistsLocally(filePath);
 
     if (!exists) return candidate;
@@ -98,20 +112,23 @@ export async function saveMediaFile(
   filename: string,
   bytes: Uint8Array,
   commitMessage?: string,
-): Promise<{ path: string; filename: string; directory: MediaDirectory }> {
+): Promise<{ path: string; filename: string; directory: MediaDirectory; deploy: Awaited<ReturnType<typeof triggerDeployHook>> }> {
   const filePath = mediaPublicPath(directory, filename);
   const message = commitMessage || `chore(hermes): add media ${directory}/${filename}`;
 
   if (isGitHubPersistenceEnabled()) {
-    const existing = await readGitHubFile(filePath);
+    const existing = await getGitHubFileMeta(filePath);
     await writeGitHubFile(filePath, bytes, message, existing.sha);
   } else {
     await writeLocalFile(filePath, bytes);
   }
 
+  const deploy = isGitHubPersistenceEnabled() ? await triggerDeployHook() : { triggered: false };
+
   return {
     directory,
     filename,
     path: mediaSitePath(directory, filename),
+    deploy,
   };
 }

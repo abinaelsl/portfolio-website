@@ -11,6 +11,7 @@ import {
   type ResearchPaper,
 } from "./types";
 import { isGitHubPersistenceEnabled, readGitHubFile, triggerDeployHook, writeGitHubFile } from "./github";
+import type { DeployHookResult } from "./github";
 import { readLocalFile, writeLocalFile } from "./local";
 
 const bundledContent: Record<ContentType, ContentItem[]> = {
@@ -69,18 +70,18 @@ async function writeRawCollection(
   items: ContentItem[],
   sha?: string,
   commitMessage?: string,
-): Promise<void> {
+): Promise<DeployHookResult> {
   const filePath = contentFilePath(type);
   const payload = `${JSON.stringify(cleanCollection(type, items), null, 2)}\n`;
   const message = commitMessage || `chore(hermes): update ${type}`;
 
   if (isGitHubPersistenceEnabled()) {
     await writeGitHubFile(filePath, payload, message, sha);
-    await triggerDeployHook();
-    return;
+    return triggerDeployHook();
   }
 
   await writeLocalFile(filePath, payload);
+  return { triggered: false };
 }
 
 export async function listContent(type: ContentType): Promise<ContentItem[]> {
@@ -92,15 +93,15 @@ export async function replaceContent(
   type: ContentType,
   items: ContentItem[],
   commitMessage?: string,
-): Promise<ContentItem[]> {
+): Promise<{ items: ContentItem[]; deploy: DeployHookResult }> {
   if (!Array.isArray(items)) {
     throw new Error("Expected an array of content items.");
   }
 
   const { sha } = await readRawCollection(type);
   const cleaned = cleanCollection(type, items);
-  await writeRawCollection(type, cleaned, sha, commitMessage);
-  return cleaned;
+  const deploy = await writeRawCollection(type, cleaned, sha, commitMessage);
+  return { items: cleaned, deploy };
 }
 
 function getItemId(type: ContentType, item: ContentItem, index: number): string {
@@ -129,7 +130,7 @@ export async function createContentItem(
   type: ContentType,
   item: ContentItem,
   commitMessage?: string,
-): Promise<ContentItem> {
+): Promise<{ item: ContentItem; deploy: DeployHookResult }> {
   const { items, sha } = await readRawCollection(type);
   const next = [...items, item];
 
@@ -142,8 +143,8 @@ export async function createContentItem(
   }
 
   const cleaned = cleanCollection(type, next);
-  await writeRawCollection(type, cleaned, sha, commitMessage);
-  return item;
+  const deploy = await writeRawCollection(type, cleaned, sha, commitMessage);
+  return { item, deploy };
 }
 
 export async function updateContentItem(
@@ -151,7 +152,7 @@ export async function updateContentItem(
   id: string,
   patch: Partial<ContentItem>,
   commitMessage?: string,
-): Promise<ContentItem> {
+): Promise<{ item: ContentItem; deploy: DeployHookResult }> {
   const found = await getContentItem(type, id);
   if (!found) throw new Error(`Item "${id}" not found in ${type}.`);
 
@@ -172,23 +173,23 @@ export async function updateContentItem(
   const next = [...items];
   next[found.index] = current;
   const cleaned = cleanCollection(type, next);
-  await writeRawCollection(type, cleaned, sha, commitMessage);
-  return current;
+  const deploy = await writeRawCollection(type, cleaned, sha, commitMessage);
+  return { item: current, deploy };
 }
 
 export async function deleteContentItem(
   type: ContentType,
   id: string,
   commitMessage?: string,
-): Promise<ContentItem> {
+): Promise<{ item: ContentItem; deploy: DeployHookResult }> {
   const found = await getContentItem(type, id);
   if (!found) throw new Error(`Item "${id}" not found in ${type}.`);
 
   const { items, sha } = await readRawCollection(type);
   const next = items.filter((_, index) => index !== found.index);
   const cleaned = cleanCollection(type, next);
-  await writeRawCollection(type, cleaned, sha, commitMessage);
-  return found.item;
+  const deploy = await writeRawCollection(type, cleaned, sha, commitMessage);
+  return { item: found.item, deploy };
 }
 
 export function summarizeCollection(type: ContentType, items: ContentItem[]) {
