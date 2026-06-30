@@ -3,8 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
-import avatar from "@/public/avatar.jpg";
-import { research, projects, channels, posts, formatDate } from "@/app/lib/data";
+import { research, projects, channels, posts, formatDate, avatarPath } from "@/app/lib/data";
 import { safeHref } from "@/app/lib/safe-href";
 import { Reveal, Stagger, StaggerItem } from "@/app/lib/motion";
 import { SiteNav } from "@/app/components/site-nav";
@@ -55,9 +54,10 @@ function Hero() {
             <div className="relative w-28 h-28">
               <div className="w-28 h-28 rounded-lg overflow-hidden border border-line-strong">
                 <Image
-                  src={avatar}
+                  src={avatarPath}
                   alt="Abinael Sarungallo Lumempouw"
-                  placeholder="blur"
+                  width={112}
+                  height={112}
                   priority
                   sizes="112px"
                   className="object-cover w-full h-full grayscale-[0.2] contrast-[1.05]"

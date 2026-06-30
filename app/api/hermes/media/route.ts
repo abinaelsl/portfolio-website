@@ -4,6 +4,7 @@ import { getContentItem, updateContentItem } from "@/app/lib/hermes/content";
 import {
   decodeBase64Payload,
   saveMediaFile,
+  saveProfileAvatar,
   uniqueFilename,
   validateMediaUpload,
 } from "@/app/lib/hermes/media";
@@ -41,6 +42,27 @@ async function handleUpload(
   const validation = validateMediaUpload(directory, mimeType, bytes.byteLength);
   if ("error" in validation) {
     return NextResponse.json({ error: validation.error }, { status: 400 });
+  }
+
+  if (directory === "profile") {
+    if (attach) {
+      return NextResponse.json(
+        { error: "Profile uploads do not support the attach block." },
+        { status: 400 },
+      );
+    }
+
+    const saved = await saveProfileAvatar(bytes, mimeType, commitMessage);
+    return NextResponse.json(
+      {
+        ok: true,
+        path: saved.path,
+        filename: saved.filename,
+        directory: saved.directory,
+        ...deployWarning(saved.deploy),
+      },
+      { status: 201 },
+    );
   }
 
   const filename = await uniqueFilename(directory, originalName);

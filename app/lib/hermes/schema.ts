@@ -81,6 +81,12 @@ export const mediaRules = {
     accept: "image/*,.pdf",
     usage: "Set the research entry `href` to the returned path to host a PDF or image.",
   },
+  profile: {
+    directory: "profile",
+    accept: "image/jpeg,image/png,image/webp",
+    usage:
+      "Overwrites the home page profile photo (public/avatar.jpg|.png|.webp) and updates app/content/site.json.",
+  },
 } as const;
 
 export function getHermesCapabilities() {
@@ -120,7 +126,7 @@ export function getHermesCapabilities() {
       {
         method: "POST",
         path: "/api/hermes/media",
-        description: "Upload an image or PDF to public/projects|writing|research",
+        description: "Upload an image or PDF to public/projects|writing|research|profile",
       },
     ],
   };

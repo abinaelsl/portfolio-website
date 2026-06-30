@@ -77,15 +77,16 @@ tools:
   portfolio_upload_media:
     description: >
       Upload an image or PDF to the site. Use directory "projects" for cover shots,
-      "writing" for post images, "research" for hosted PDFs/images.
-      Optionally attach to a content item in the same request.
+      "writing" for post images, "research" for hosted PDFs/images,
+      "profile" for the home page profile photo.
+      Optionally attach to a content item in the same request (not for profile).
     method: POST
     url: "${PORTFOLIO_SITE_URL}/api/hermes/media"
     headers:
       Authorization: "Bearer ${PORTFOLIO_API_KEY}"
       Content-Type: application/json
     body:
-      directory: "{projects|writing|research}"
+      directory: "{projects|writing|research|profile}"
       filename: "{original-filename.png}"
       mimeType: "{image/png|image/jpeg|application/pdf}"
       contentBase64: "{base64_bytes}"
@@ -93,6 +94,21 @@ tools:
         contentType: "{projects|posts|research}"
         id: "{slug_or_index}"
         markdownAlt: "{optional alt text for posts}"
+
+  portfolio_upload_profile_photo:
+    description: >
+      Upload a new profile photo for the home page hero section.
+      Overwrites public/avatar.jpg (or .png/.webp) and updates site.json.
+    method: POST
+    url: "${PORTFOLIO_SITE_URL}/api/hermes/media"
+    headers:
+      Authorization: "Bearer ${PORTFOLIO_API_KEY}"
+      Content-Type: application/json
+    body:
+      directory: profile
+      filename: "{filename}"
+      mimeType: "{image/jpeg|image/png|image/webp}"
+      contentBase64: "{base64_bytes}"
 
   portfolio_upload_project_cover:
     description: >
