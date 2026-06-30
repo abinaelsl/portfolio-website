@@ -10,5 +10,17 @@
       "Energy Efficiency",
       "Tropical Climate"
     ]
+  },
+  {
+    "title": "Self-Learning Trading Agent: Automated Strategy Optimization via Scientific Experiment Loop",
+    "authors": "Abinael Sarungallo Lumempouw",
+    "venue": "Independent Research",
+    "href": "https://github.com/abinaelsl/trading-agent",
+    "tags": [
+      "quantitative finance",
+      "algorithmic trading",
+      "backtesting",
+      "automated experimentation"
+    ]
   }
 ]
