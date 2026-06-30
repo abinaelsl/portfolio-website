@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import postsData from "@/app/content/posts.json";
 import projectsData from "@/app/content/projects.json";
 import researchData from "@/app/content/research.json";
+import siteData from "@/app/content/site.json";
 
 // ── Social links ──────────────────────────────────────────────────────────────
 // Icons live in code (they carry SVG); everything editable lives in app/content/*.json.
@@ -74,6 +75,15 @@ export const socials: Social[] = [
 ];
 
 export const EMAIL = "abinaelad@gmail.com";
+
+// ── Site ────────────────────────────────────────────────────────────────────────
+export type Site = {
+  avatar: string;
+};
+
+export const site: Site = siteData as Site;
+
+export const avatarPath = site.avatar;
 
 // ── Research ────────────────────────────────────────────────────────────────────
 export type Paper = {

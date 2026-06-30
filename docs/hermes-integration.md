@@ -76,6 +76,23 @@ Authorization: Bearer <key>
 }
 ```
 
+### Upload a profile photo
+
+```http
+POST /api/hermes/media
+Content-Type: application/json
+Authorization: Bearer <key>
+
+{
+  "directory": "profile",
+  "filename": "me.jpg",
+  "mimeType": "image/jpeg",
+  "contentBase64": "<base64>"
+}
+```
+
+This overwrites `public/avatar.jpg` (or `.png` / `.webp` depending on mime type) and updates `app/content/site.json` so the home page hero photo changes after redeploy.
+
 ### Upload a project cover image
 
 Send a photo Hermes received from you and attach it to the Hermes project entry:
@@ -138,6 +155,7 @@ Research items are addressed by **index** (`0`, `1`, …) in URLs.
 
 | Content | Directory | Field to set |
 |---------|-----------|--------------|
+| Profile photo (hero) | `profile` | auto-updates `site.json` → `/avatar.jpg` etc. |
 | Project cover | `projects` | `image` → `/projects/filename.png` |
 | Writing inline image | `writing` | embed in `body` as `![alt](/writing/file.png)` |
 | Hosted research PDF/image | `research` | `href` → `/research/file.pdf` |
@@ -156,4 +174,4 @@ See `hermes-tools.yaml` in the repo root for ready-to-copy YAML tool specs.
 
 - Never put `HERMES_API_KEY` in client-side code or `NEXT_PUBLIC_*` env vars.
 - Rotate the key if it leaks.
-- The API only mutates content files under `app/content/` and media under `public/projects|writing|research/`.
+- The API only mutates content files under `app/content/` and media under `public/projects|writing|research|profile` (avatar).

@@ -1,5 +1,6 @@
 import path from "node:path";
 import {
+  getProfileAvatarTarget,
   isMediaDirectory,
   mediaPublicPath,
   mediaSitePath,
@@ -12,6 +13,7 @@ import {
   writeGitHubFile,
 } from "./github";
 import { writeLocalFile } from "./local";
+import { updateSiteAvatar } from "./site";
 
 const MAX_MEDIA_BYTES = 4 * 1024 * 1024;
 
@@ -43,12 +45,21 @@ export function validateMediaUpload(
 ): { directory: MediaDirectory } | { error: string } {
   if (!isMediaDirectory(directory)) {
     return {
-      error: `Invalid directory "${directory}". Use one of: projects, writing, research.`,
+      error: `Invalid directory "${directory}". Use one of: projects, writing, research, profile.`,
     };
   }
 
   if (size > MAX_MEDIA_BYTES) {
     return { error: `File too large. Maximum size is ${MAX_MEDIA_BYTES} bytes.` };
+  }
+
+  if (directory === "profile") {
+    if (!getProfileAvatarTarget(mimeType)) {
+      return {
+        error: `Unsupported file type "${mimeType}" for profile. Use image/jpeg, image/png, or image/webp.`,
+      };
+    }
+    return { directory };
   }
 
   const allowed =
@@ -129,6 +140,40 @@ export async function saveMediaFile(
     directory,
     filename,
     path: mediaSitePath(directory, filename),
+    deploy,
+  };
+}
+
+export async function saveProfileAvatar(
+  bytes: Uint8Array,
+  mimeType: string,
+  commitMessage?: string,
+): Promise<{
+  path: string;
+  filename: string;
+  directory: "profile";
+  deploy: Awaited<ReturnType<typeof triggerDeployHook>>;
+}> {
+  const target = getProfileAvatarTarget(mimeType);
+  if (!target) {
+    throw new Error(`Unsupported profile image type "${mimeType}".`);
+  }
+
+  const message = commitMessage || "chore(hermes): update profile avatar";
+
+  if (isGitHubPersistenceEnabled()) {
+    const existing = await getGitHubFileMeta(target.repoPath);
+    await writeGitHubFile(target.repoPath, bytes, message, existing.sha);
+  } else {
+    await writeLocalFile(target.repoPath, bytes);
+  }
+
+  const { deploy } = await updateSiteAvatar(target.sitePath, message);
+
+  return {
+    directory: "profile",
+    filename: target.filename,
+    path: target.sitePath,
     deploy,
   };
 }
