@@ -131,7 +131,7 @@
       <h2>Equity — who adopts &amp; who benefits</h2>
       <div class="chartbox">
         <div class="ct">Adoption rate by income decile</div>
-        <div class="cs">D1 = poorest, D10 = richest. Watch how subsidy + financing lift the poorest deciles.</div>
+        <div class="cs">D1 = poorest, D10 = richest. I use this chart to see whether subsidy and financing actually reach the poorest deciles.</div>
         <div id="chartAdopt"></div>
       </div>
       <div class="chartbox">
@@ -142,27 +142,27 @@
     </div>
 
     <div class="panel">
-      <h2>Compare the four instruments <span class="pill">the core of your research</span></h2>
+      <h2>Compare the four instruments <span class="pill">core of this research</span></h2>
       <div class="btnrow"><button class="btn" id="cmpBtn">Run comparison</button></div>
       <div id="cmpWrap"></div>
-      <div class="note">Each instrument run on its own at a representative setting. “Best” is highlighted per column; note no instrument wins on every criterion — the contribution is the trade-off.</div>
+      <div class="note">Each instrument is run on its own at a representative setting. “Best” is highlighted per column. No instrument wins on every criterion — the point is to make the trade-off visible.</div>
     </div>
 
     <div class="panel">
       <details open>
-        <summary>About the model — so you can defend every number</summary>
-        <p><b>What it is:</b> a transparent discrete-choice (logit) model of household retrofit adoption, coupled to the engineering savings from my Energy3D thesis, used to score policy instruments on effectiveness, fiscal efficiency, and equity. It is a decision-support <b>prototype</b>, not an econometrically estimated model.</p>
-        <p><b>Per household (decile) the yearly net benefit is:</b><br>
+        <summary>About the model</summary>
+        <p>I built this simulator to answer a question my engineering thesis could not: <em>which policy instrument actually gets Type 36 households to adopt the retrofit?</em> It links the Energy3D savings from my final degree project to a discrete-choice (logit) model of household adoption, then scores subsidies, green finance, mandates, and nudges on effectiveness, fiscal cost, and equity. This is a decision-support <b>prototype</b> — transparent and adjustable — not an econometrically estimated model.</p>
+        <p><b>For each income decile, I compute yearly net benefit as:</b><br>
         <code>NB = cash saving + value of recovered comfort − annualised cost of the retrofit</code></p>
         <ul>
           <li><b>Cash saving</b> = (energy saving % × baseline use) × (1 − rebound) × tariff.</li>
-          <li><b>Recovered comfort</b> = comfort-value × (energy saving × rebound × tariff). Poorer deciles take more of the gain as comfort (they were rationing) — this is the rationed-comfort welfare my plan emphasises.</li>
-          <li><b>Annualised cost</b> = (retrofit cost after subsidy) × capital-recovery factor, at the loan rate if financing is on, otherwise at the household's own (present-biased) discount rate.</li>
+          <li><b>Recovered comfort</b> = comfort-value × (energy saving × rebound × tariff). I model poorer deciles as taking more of the gain as comfort rather than cash — they were rationing use before the retrofit. This rationed-comfort welfare term is central to how I read equity in the results.</li>
+          <li><b>Annualised cost</b> = (retrofit cost after subsidy) × capital-recovery factor, at the loan rate when green financing is on, otherwise at the household's own (present-biased) discount rate.</li>
         </ul>
-        <p><b>Adoption</b> is a logit on a benefit-vs-affordability index <code>z</code>: <code>P(adopt)=1/(1+e^(−z))</code>, where <code>z</code> rises with net benefit (scaled by income), is pushed down by an <b>adoption-friction</b> term (behavioural barriers — split incentives, hassle, distrust, non-take-up — which is why uptake stays low even when the retrofit pays off: <em>this is the energy-efficiency gap</em>), gets a boost from a nudge (which offsets the friction), and is penalised by a liquidity constraint when a household must pay upfront and can't (removed by financing). A mandate forces adoption on the new-build share.</p>
-        <p><b>Then aggregate</b> over the housing stock for adoption, kWh &amp; CO₂ saved, fiscal cost, cost per kWh / per ton CO₂, and a social benefit–cost ratio (adding the social cost of carbon on avoided emissions; subsidies are transfers, not social costs).</p>
-        <p><b>Data &amp; sources:</b> energy saving 57% and retrofit cost from my Energy3D thesis (Lumempouw 2026); tariff IDR 1,444.70/kWh (PLN 2024); grid emission factor from IEA/ESDM (coal-heavy grid); income deciles are <em>illustrative</em>, set to Indonesian urban ranges — replace them by importing real household data (CSV).</p>
-        <p class="note">Honest caveats to state up front: the logit scale is assumed, not estimated from revealed-preference data (that's the doctoral step); deciles are representative, not a survey; comfort valuation is a parameter, not measured. Everything is adjustable so the sensitivity is visible.</p>
+        <p><b>Adoption</b> follows a logit on a benefit-vs-affordability index <code>z</code>: <code>P(adopt)=1/(1+e^(−z))</code>. <code>z</code> rises with net benefit (scaled by income), falls with an <b>adoption-friction</b> term that captures behavioural barriers — split incentives, hassle, distrust, non-take-up — which is why uptake stays low even when the retrofit pays off on paper (<em>the energy-efficiency gap</em>). A nudge partly offsets that friction; paying upfront without financing triggers a liquidity penalty; a mandate forces adoption on the new-build share.</p>
+        <p><b>Aggregation</b> rolls up across the housing stock: adoption, kWh and CO₂ saved, fiscal cost, cost per kWh and per ton CO₂, and a social benefit–cost ratio. I add the social cost of carbon on avoided emissions; subsidies count as transfers, not social costs.</p>
+        <p><b>Data and sources:</b> the 57% energy saving and retrofit cost come from my Energy3D thesis (Lumempouw 2026); tariff IDR 1,444.70/kWh (PLN 2024); grid emission factor from IEA/ESDM for Indonesia's coal-heavy grid. The income deciles loaded by default are <em>illustrative</em> — Indonesian urban ranges I set for exploration. You can import real household data via CSV.</p>
+        <p class="note">Caveats I want visible: the logit scale is assumed, not estimated from revealed-preference data (that would be the next research step); deciles are representative, not from a survey; comfort valuation is a parameter, not measured directly. I left every assumption on a slider so the sensitivity shows up in the outputs.</p>
       </details>
     </div>
   </div>
