@@ -138,8 +138,8 @@
         <div id="chartAdopt"></div>
       </div>
       <div class="chartbox">
-        <div class="ct">Annual welfare gain per adopting household (IDR million)</div>
-        <div class="cs">Cash saving + value of recovered comfort. The poor gain most in <em>comfort</em>, the rich in cash.</div>
+        <div class="ct">Welfare gain as a share of household income (per adopter)</div>
+        <div class="cs">Energy-burden relief. The <b>poorest gain most relative to income</b> — and a larger share of their gain is recovered <span style="color:#2A9D8F;font-weight:700">comfort</span> vs <span style="color:#E76F51;font-weight:700">cash</span>. (Absolute rupiah favours big users; income-share is the equity view.)</div>
         <div id="chartBenefit"></div>
       </div>
     </div>
@@ -260,7 +260,7 @@ function run(p){
     socBenefit += ad*(cashSave+comfort);
     socCost += ad*socResourceCost;
     privBenefit += ad*NB;
-    rows.push({id:d.id, P, welfare:(cashSave+comfort), cash:cashSave, comfort});
+    rows.push({id:d.id, P, welfare:(cashSave+comfort), cash:cashSave, comfort, income:d.income});
   });
   const tons = kwh*p.EF/1000;
   const co2Value = tons*p.scc;
@@ -287,6 +287,22 @@ function bars(el, data, opt){
     s+=`<rect x="${x}" y="${y}" width="${barW}" height="${Math.max(0,h)}" rx="2" fill="${d.c||'#2A9D8F'}"/>`;
     s+=`<text x="${x+barW/2}" y="${H-11}" font-size="9.5" fill="#5C6B70" text-anchor="middle">${d.l}</text>`;
     s+=`<text x="${x+barW/2}" y="${y-3}" font-size="9.5" fill="#12343B" text-anchor="middle" font-weight="700">${d.t}</text>`;
+  });
+  s+=`</svg>`; el.innerHTML=s;
+}
+// ---------- stacked SVG bar chart (segments from bottom) ----------
+function stackedBars(el, data, opt){
+  opt=opt||{}; const W=560,H=182,pad=34,bw=W-pad-8,n=data.length;
+  const totals=data.map(d=>d.segs.reduce((a,s)=>a+s.v,0));
+  const max=Math.max(...totals,opt.min||0.0001), gap=6, barW=(bw/n)-gap;
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" style="max-width:600px">`;
+  s+=`<line x1="${pad}" y1="${H-24}" x2="${W-4}" y2="${H-24}" stroke="#cdd8d6"/>`;
+  data.forEach((d,i)=>{
+    const x=pad+i*(barW+gap); let yB=H-24;
+    d.segs.forEach(seg=>{ const h=(seg.v/max)*(H-54); yB-=h;
+      s+=`<rect x="${x}" y="${yB}" width="${barW}" height="${Math.max(0,h)}" fill="${seg.c}"/>`; });
+    s+=`<text x="${x+barW/2}" y="${H-11}" font-size="9.5" fill="#5C6B70" text-anchor="middle">${d.l}</text>`;
+    s+=`<text x="${x+barW/2}" y="${yB-3}" font-size="9" fill="#12343B" text-anchor="middle" font-weight="700">${d.t}</text>`;
   });
   s+=`</svg>`; el.innerHTML=s;
 }
@@ -318,8 +334,10 @@ function render(){
 
   bars($('chartAdopt'), r.rows.map(x=>({l:x.id, v:x.P, t:(x.P*100).toFixed(0)+'%',
      c: x.id==='D1'||x.id==='D2'||x.id==='D3' ? '#E76F51':'#2A9D8F'})), {min:0.01});
-  bars($('chartBenefit'), r.rows.map(x=>({l:x.id, v:x.welfare, t:(x.welfare/1e6).toFixed(1),
-     c:'#2A9D8F'})));
+  stackedBars($('chartBenefit'), r.rows.map(x=>{
+     const comfPct=x.comfort/x.income*100, cashPct=x.cash/x.income*100;
+     return {l:x.id, segs:[{v:comfPct,c:'#2A9D8F'},{v:cashPct,c:'#E76F51'}], t:(comfPct+cashPct).toFixed(1)+'%'};
+  }));
   renderDataTable();
 }
 
