@@ -135,12 +135,13 @@ function Research() {
         <SectionLabel index="02 / Research">Research</SectionLabel>
       </Reveal>
       <div className="space-y-6">
-        {research.map((p, i) => (
+        {research.map((p, i) => {
+          const external = p.href.startsWith("http");
+          return (
           <Reveal key={p.title} delay={i * 0.06}>
             <a
               href={safeHref(p.href)}
-              target="_blank"
-              rel="noopener noreferrer"
+              {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
               className="group block pl-4 border-l-2 border-line
                          hover:border-accent transition-colors duration-200
                          rounded-r-md focus-visible:outline-none"
@@ -159,7 +160,8 @@ function Research() {
               </div>
             </a>
           </Reveal>
-        ))}
+        );
+        })}
       </div>
     </section>
   );

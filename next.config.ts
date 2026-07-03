@@ -24,6 +24,9 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async rewrites() {
+    return [{ source: "/reps", destination: "/reps/index.html" }];
+  },
 };
 
 export default nextConfig;
