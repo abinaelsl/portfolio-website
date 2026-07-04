@@ -4,6 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>REPS — Residential Retrofit Policy Simulator</title>
+<meta name="description" content="A transparent discrete-choice policy simulator: which instrument gets Indonesia's Type 36 households to adopt an energy retrofit? By A. S. Lumempouw.">
+<meta property="og:title" content="REPS — Residential Retrofit Policy Simulator">
+<meta property="og:description" content="Which policy closes the energy-efficiency gap in Indonesia's Type 36 housing? Set a policy, see adoption, cost-effectiveness & equity.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://abinael.xyz/reps">
 <style>
   :root{--dark:#12343B;--teal:#2A9D8F;--tealD:#1E7268;--coral:#E76F51;--ink:#1D2B30;--mut:#5C6B70;
         --line:#dce6e4;--tint:#EAF3F1;--tint2:#FBEEE8;--bg:#f4f7f7;--card:#fff;}
@@ -70,6 +75,7 @@
         <button class="btn" id="loadDefault">Load Indonesia defaults</button>
         <button class="btn ghost" id="importBtn">Import CSV…</button>
         <button class="btn ghost" id="tmplBtn">Sample CSV</button>
+        <button class="btn ghost" id="resetBtn">Reset all</button>
       </div>
       <input type="file" id="fileIn" accept=".csv" style="display:none">
       <div class="note" id="dataNote">10 income deciles loaded (illustrative, Indonesian ranges).</div>
@@ -79,7 +85,7 @@
     <div class="panel">
       <h2>2 · Policy levers</h2>
 
-      <div class="toggle"><input type="checkbox" id="subOn" checked> Consumer subsidy</div>
+      <div class="toggle"><input type="checkbox" id="subOn"> Consumer subsidy</div>
       <label class="ctl"><span class="lab">Subsidy on retrofit cost <span class="val" id="subV">40%</span></span>
         <input type="range" id="sub" min="0" max="90" value="40" step="5"></label>
 
@@ -148,7 +154,7 @@
       <h2>Compare the four instruments <span class="pill">core of this research</span></h2>
       <div class="btnrow"><button class="btn" id="cmpBtn">Run comparison</button></div>
       <div id="cmpWrap"></div>
-      <div class="note">Each instrument is run on its own at a representative setting. “Best” is highlighted per column. No instrument wins on every criterion — the point is to make the trade-off visible.</div>
+      <div class="note">Each instrument is run on its own at a representative setting. “Best” is highlighted per column. No instrument wins on every criterion — the point is to make the trade-off visible. Two honest footnotes: the mandate’s fiscal cost is ≈ 0 because its real cost is off-budget — borne by developers and buyers (the incidence is itself a research question); and the nudge setting is optimistic — field-experiment nudge effects are typically a few percentage points, so treat the nudge row as an upper bound.</div>
     </div>
 
     <div class="panel">
@@ -159,8 +165,8 @@
         <code>NB = cash saving + value of recovered comfort − annualised cost of the retrofit</code></p>
         <ul>
           <li><b>Cash saving</b> = (energy saving % × baseline use) × (1 − rebound) × tariff.</li>
-          <li><b>Recovered comfort</b> = comfort-value × (energy saving × rebound × tariff). I model poorer deciles as taking more of the gain as comfort rather than cash — they were rationing use before the retrofit. This rationed-comfort welfare term is central to how I read equity in the results.</li>
-          <li><b>Annualised cost</b> = (retrofit cost after subsidy) × capital-recovery factor, at the loan rate when green financing is on, otherwise at the household's own (present-biased) discount rate.</li>
+          <li><b>Recovered comfort</b> = comfort-value × (energy saving × rebound × tariff). I model poorer deciles as taking more of the gain as comfort rather than cash — they were rationing use before the retrofit. Concretely, the rebound slider is scaled by decile: <code>ρ_d = min(0.6, ρ × (1.4 − 0.08·i))</code>, so the poorest decile rebounds ~1.4× the slider value and the richest ~0.7×. This rationed-comfort welfare term is central to how I read equity in the results.</li>
+          <li><b>Annualised cost</b> = (retrofit cost after subsidy) × capital-recovery factor, at the loan rate when green financing is on, otherwise at the household's own (present-biased) discount rate. I annualise over a 15-year horizon — conservative, since the envelope measures last for decades.</li>
         </ul>
         <p><b>Adoption</b> follows a logit on a benefit-vs-affordability index <code>z</code>: <code>P(adopt)=1/(1+e^(−z))</code>. <code>z</code> rises with net benefit (scaled by income), falls with an <b>adoption-friction</b> term that captures behavioural barriers — split incentives, hassle, distrust, non-take-up — which is why uptake stays low even when the retrofit pays off on paper (<em>the energy-efficiency gap</em>). A nudge partly offsets that friction; paying upfront without financing triggers a liquidity penalty; a mandate forces adoption on the new-build share.</p>
         <p><b>Aggregation</b> rolls up across the housing stock: adoption, kWh and CO₂ saved, fiscal cost, cost per kWh and per ton CO₂, and a social benefit–cost ratio. I add the social cost of carbon on avoided emissions; subsidies count as transfers, not social costs.</p>
@@ -253,8 +259,8 @@ function run(p){
     let fis=0;
     if(p.subOn) fis += p.sub*p.C;                          // subsidy paid per adopter
     if(p.finOn) fis += Cnet*Math.max(0,(0.12-p.finR))*p.finT*0.5; // interest subsidy vs 12% market
-    if(p.nudOn) fis += 150000*p.nud;                       // campaign cost per targeted hh
     fiscal += ad*fis;
+    if(p.nudOn) fiscal += unitsD*150000*p.nud;             // campaign cost per TARGETED household (reached ≠ adopted)
     // welfare (transfers excluded): real resource benefit − real resource cost
     const socResourceCost = p.C*crf(0.08,p.H); // retrofit at social discount 8%
     socBenefit += ad*(cashSave+comfort);
@@ -351,29 +357,32 @@ function renderDataTable(){
 function compare(){
   const base=params();
   const scen={
+    'No policy':{...base,subOn:false,finOn:false,nudOn:false,manOn:false},
     'Mandate (new builds)':{...base,subOn:false,finOn:false,nudOn:false,manOn:true,manC:0.15},
     'Subsidy 40%':{...base,subOn:true,sub:0.4,finOn:false,nudOn:false,manOn:false},
     'Green finance 5%':{...base,subOn:false,finOn:true,finR:0.05,finT:10,nudOn:false,manOn:false},
-    'Nudge + boost':{...base,subOn:false,finOn:false,nudOn:true,nud:0.6,manOn:false},
+    'Nudge + boost':{...base,subOn:false,finOn:false,nudOn:true,nud:0.3,manOn:false}, // 0.3 = optimistic; field-experiment effects are smaller
   };
   const res={}; Object.keys(scen).forEach(k=>res[k]=run(scen[k]));
-  // equity metric: adoption in bottom-3 deciles
-  const bottom=r=>r.rows.slice(0,3).reduce((a,x)=>a+x.P,0)/3;
+  // equity metric: adoption in the bottom four deciles (World Bank "bottom 40%")
+  const bottom=r=>r.rows.slice(0,4).reduce((a,x)=>a+x.P,0)/4;
   const cols=[
     {k:'adopt',f:r=>(r.adoptRate*100).toFixed(0)+'%',better:'max',raw:r=>r.adoptRate},
-    {k:'fiscal',f:r=>'Rp '+idr(r.fiscal),better:'min',raw:r=>r.fiscal},
-    {k:'perTon',f:r=>'Rp '+idr(r.costPerTon),better:'min',raw:r=>r.costPerTon||9e18},
+    {k:'fiscal',f:r=>r.fiscal>0?'Rp '+idr(r.fiscal):'—',better:'min',raw:r=>r.fiscal},
+    {k:'perTon',f:r=>r.fiscal>0?'Rp '+idr(r.costPerTon):'—',better:'min',raw:r=>r.fiscal>0?r.costPerTon:9e18},
     {k:'equity',f:r=>(bottom(r)*100).toFixed(0)+'%',better:'max',raw:r=>bottom(r)},
     {k:'bcr',f:r=>r.bcr.toFixed(2),better:'max',raw:r=>r.bcr},
   ];
   const names=Object.keys(scen);
-  // find best per column
+  // find best per column (baseline excluded — "no policy" can't win)
+  const instr=names.filter(n=>n!=='No policy');
   const best={};
   cols.forEach(c=>{
-    let vals=names.map(n=>c.raw(res[n]));
-    best[c.k]= c.better==='max'? names[vals.indexOf(Math.max(...vals))] : names[vals.indexOf(Math.min(...vals))];
+    let vals=instr.map(n=>c.raw(res[n]));
+    best[c.k]= c.better==='max'? instr[vals.indexOf(Math.max(...vals))] : instr[vals.indexOf(Math.min(...vals))];
   });
   let h='<table><tr><th>Instrument</th><th>Adoption</th><th>Fiscal cost</th><th>Cost / ton CO₂</th><th>Bottom-40% adoption</th><th>Benefit–cost</th></tr>';
+  // (bottom-40% = average adoption across deciles D1–D4)
   names.forEach(n=>{
     const r=res[n];
     const cell=(c)=>`<td class="num ${best[c.k]===n?'best':''}">${c.f(r)}</td>`;
@@ -402,6 +411,7 @@ function parseCSV(txt){
 // ---------- wiring ----------
 document.querySelectorAll('input[type=range],input[type=checkbox]').forEach(el=>el.addEventListener('input',render));
 $('loadDefault').onclick=()=>{DATA=DEFAULT.map(d=>({...d}));$('dataNote').textContent='10 income deciles loaded (illustrative, Indonesian ranges).';render();};
+$('resetBtn').onclick=()=>location.reload();
 $('cmpBtn').onclick=compare;
 $('importBtn').onclick=()=>$('fileIn').click();
 $('fileIn').onchange=e=>{const f=e.target.files[0];if(!f)return;const fr=new FileReader();
