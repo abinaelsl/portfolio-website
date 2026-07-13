@@ -184,7 +184,7 @@ const timeline = [
     title: "Visa Change",
     detail: "Switch from undergrad Student status to research-student Student status. Smooth change-of-status at Fukuoka Immigration.",
     status: "action",
-    href: "https://www.moj.go.jp/isa/applications/status/changeofstatus.html",
+    href: "https://www.moj.go.jp/isa/applications/procedures/16-2.html?lang=en",
   },
   {
     date: "Dec 2026",
@@ -358,28 +358,28 @@ const scholarshipOptions = [
     amount: "¥143,000–145,000/mo + full tuition",
     deadline: "Via Kyushu U internal selection (~Spring 2027)",
     note: "University nominates outstanding students to MEXT. Prof. Hazarika could recommend. Full coverage.",
-    href: "https://www.mext.go.jp/en/policy/education/highered/title02/detail02/sdetail02/1347960.htm",
+    href: "https://www.studyinjapan.go.jp/en/smap-stopj-applications-research.html",
   },
   {
     name: "JASSO Honors Scholarship",
     amount: "¥48,000/mo",
     deadline: "After enrollment (auto-eligible if GPA ≥ 3.0)",
     note: "For privately financed international students already in Japan. Application through the university.",
-    href: "https://www.jasso.go.jp/en/study_j/scholarships/",
+    href: "https://www.jasso.go.jp/en/ryugaku/scholarship_j/shoreihi/about.html",
   },
   {
     name: "Kyushu University International Student Scholarship",
     amount: "Tuition waiver (50–100%)",
     deadline: "After enrollment",
     note: "University-specific aid. Already received this during undergrad — strong track record.",
-    href: "https://www.isc.kyushu-u.ac.jp/intlweb/en/scholarship",
+    href: "https://www.isc.kyushu-u.ac.jp/intlweb/scholarship/view/list.php?lang=en",
   },
   {
     name: "ADB-Japan Scholarship Program",
     amount: "Full tuition + monthly stipend + housing + travel",
     deadline: "~Nov–Dec 2026 (varies by university)",
     note: "Funds students from ADB developing member countries (Indonesia ✓) at participating universities including Kyushu U.",
-    href: "https://www.adb.org/what-we-do/adb-japan-scholarship-program",
+    href: "https://www.adb.org/work-with-us/careers/japan-scholarship-program",
   },
 ];
 
@@ -392,7 +392,7 @@ const visaOptions = [
     cost: "Tuition ~¥35,000/mo (cheaper than master's ¥535,800/yr)",
     note: "Smooth change-of-status from undergrad Student visa. Keeps you in Fukuoka, in the lab, and legally resident.",
     active: true,
-    href: "https://www.moj.go.jp/isa/applications/status/16.html",
+    href: "https://www.moj.go.jp/isa/applications/procedures/16-2.html?lang=en",
   },
   {
     name: "Designated Activities (Job Hunting) Visa",
@@ -402,7 +402,7 @@ const visaOptions = [
     cost: "No tuition (not enrolled)",
     note: "Fallback if NO program is secured by Nov 2026. Apply at Fukuoka Immigration Bureau before current visa expires.",
     active: false,
-    href: "https://www.moj.go.jp/isa/applications/status/51.html",
+    href: "https://www.moj.go.jp/isa/applications/resources/nyukan_nyukan84.html?lang=en",
   },
   {
     name: "J-Find (Future Creation Talent) Visa",
@@ -412,7 +412,7 @@ const visaOptions = [
     cost: "No tuition",
     note: "For graduates of distinguished universities. Kyushu U qualifies. Longer than the standard job-hunting visa.",
     active: false,
-    href: "https://www.moj.go.jp/isa/applications/status/j-find.html",
+    href: "https://www.moj.go.jp/isa/applications/status/designatedactivities51.html",
   },
 ];
 
