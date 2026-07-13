@@ -3,6 +3,7 @@ import { SubHeader } from "@/app/components/sub-header";
 import { PageFooter } from "@/app/components/page-footer";
 import { Reveal } from "@/app/lib/motion";
 import { CrossMark } from "@/app/components/orbital";
+import { safeHref } from "@/app/lib/safe-href";
 
 export const metadata: Metadata = {
   title: "Master's Plan",
@@ -68,6 +69,62 @@ function TagMuted({ children }: { children: React.ReactNode }) {
   );
 }
 
+// Renders a heading that links to an external page if `href` is provided.
+function LinkableTitle({
+  children,
+  href,
+  className = "",
+}: {
+  children: React.ReactNode;
+  href?: string;
+  className?: string;
+}) {
+  if (!href) {
+    return (
+      <p className={`font-heading font-bold uppercase tracking-wide text-lg text-ink ${className}`}>
+        {children}
+      </p>
+    );
+  }
+  return (
+    <a
+      href={safeHref(href)}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`group font-heading font-bold uppercase tracking-wide text-lg text-ink hover:text-accent transition-colors inline-flex items-center gap-1.5 ${className}`}
+    >
+      {children}
+      <span aria-hidden className="text-accent text-sm transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
+    </a>
+  );
+}
+
+// Smaller linkable heading for medium-weight titles.
+function LinkableHeading({
+  children,
+  href,
+  className = "",
+}: {
+  children: React.ReactNode;
+  href?: string;
+  className?: string;
+}) {
+  if (!href) {
+    return <p className={`font-medium text-ink ${className}`}>{children}</p>;
+  }
+  return (
+    <a
+      href={safeHref(href)}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`group font-medium text-ink hover:text-accent transition-colors inline-flex items-center gap-1 ${className}`}
+    >
+      {children}
+      <span aria-hidden className="text-accent text-xs transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
+    </a>
+  );
+}
+
 // ── data ─────────────────────────────────────────────────────────────────────
 
 const profileStats = [
@@ -85,102 +142,119 @@ const timeline = [
     title: "ISGS Interview",
     detail: "Oral interview for the International Master's Course at ISGS, Kyushu University. Result pending Jul 27.",
     status: "done",
+    href: "https://www.isc.kyushu-u.ac.jp/intlweb/en/admission/degree",
   },
   {
     date: "Jul 27, 2026",
     title: "ISGS Result",
     detail: "Final admission decision for ISGS. If accepted → enroll Oct 2026. If not → activate Plan B (research student).",
     status: "pending",
+    href: "https://www.isc.kyushu-u.ac.jp/intlweb/en/admission/degree",
   },
   {
     date: "Sep 25, 2026",
     title: "Osaka U Pre-Application",
     detail: "Declare language (Eng/JP) + chosen fundamental subject (Math/Physics/Chemistry) for Osaka U Sustainable Energy & Environmental Engineering.",
     status: "deadline",
+    href: "https://see.eng.osaka-u.ac.jp/en/exam/masters_1",
   },
   {
     date: "Oct 2026",
     title: "Graduate ISI 🎓",
     detail: "Receive Bachelor of Science and Arts from Kyushu University. Residence card expires Nov 2026 — visa action required.",
     status: "milestone",
+    href: "https://www.isc.kyushu-u.ac.jp/intlweb/en",
   },
   {
     date: "Oct 2026",
     title: "Start Research Student",
     detail: "Enroll as kenkyūsei under Prof. Hazarika Hemanta, Dept. of Civil Engineering. Student visa extended. Tuition ~¥35,000/mo.",
     status: "milestone",
+    href: "https://www.tj.kyushu-u.ac.jp/en/exam/research_student.php",
   },
   {
     date: "Oct 26–30, 2026",
     title: "Osaka U Application",
     detail: "Submit application documents for the winter exam (Apr 2027 enrollment). Written exam + oral exam in winter.",
     status: "deadline",
+    href: "https://see.eng.osaka-u.ac.jp/en/exam/masters_1",
   },
   {
     date: "Nov 2026",
     title: "Visa Change",
     detail: "Switch from undergrad Student status to research-student Student status. Smooth change-of-status at Fukuoka Immigration.",
     status: "action",
+    href: "https://www.moj.go.jp/isa/applications/status/changeofstatus.html",
   },
   {
     date: "Dec 2026",
     title: "Tohoku G2SD Application",
     detail: "Apply to Tohoku University G2SD (Global Governance & Sustainable Development) for Apr 2027 intake. Document screening + online interview, no written exam.",
     status: "deadline",
+    href: "https://www.intcul.tohoku.ac.jp/g2sd",
   },
   {
     date: "Jan 6–14, 2027",
     title: "Nagoya U G30 Application",
     detail: "First-round application to Nagoya University G30 Civil & Environmental Engineering (100% English). Document screening + oral exam (~20 min).",
     status: "deadline",
+    href: "https://admissions.g30.nagoya-u.ac.jp/graduate-programs/civil_environmental",
   },
   {
     date: "Feb 2027",
     title: "Tohoku G2SD Exam",
     detail: "Online interview for Tohoku G2SD (if applied in Dec). Result expected ~Mar 2027.",
     status: "exam",
+    href: "https://www.intcul.tohoku.ac.jp/g2sd",
   },
   {
     date: "Feb–Mar 2027",
     title: "Osaka U Exam Period",
     detail: "Written exam (1 fundamental subject + Environmental Engineering) and oral exam for Osaka U winter intake.",
     status: "exam",
+    href: "https://see.eng.osaka-u.ac.jp/en/exam/masters_1",
   },
   {
     date: "Mar 2027",
     title: "Tohoku G2SD Result",
     detail: "Admission decision from Tohoku G2SD for Apr 2027 enrollment.",
     status: "result",
+    href: "https://www.intcul.tohoku.ac.jp/g2sd",
   },
   {
     date: "Apr 2027",
     title: "Decision Point",
     detail: "If accepted to Tohoku G2SD → start Master's. If not → continue research student and prepare for Kyushu Civil Eng General Exam.",
     status: "milestone",
+    href: "https://www.intcul.tohoku.ac.jp/g2sd",
   },
   {
     date: "May 2027",
     title: "Nagoya G30 Round 2",
     detail: "Second-round (rolling) application for Nagoya G30 if seats remain. Backup for Oct 2027 intake.",
     status: "deadline",
+    href: "https://admissions.g30.nagoya-u.ac.jp/graduate-programs/civil_environmental",
   },
   {
     date: "May–Jun 2027",
     title: "Tohoku G2SD (Oct Intake)",
     detail: "Application + interview for Tohoku G2SD October 2027 intake (if Apr intake didn't work out).",
     status: "deadline",
+    href: "https://www.intcul.tohoku.ac.jp/g2sd",
   },
   {
     date: "Jul 2027",
     title: "Kyushu U Civil Eng General Exam",
     detail: "Backup plan: take the General Entrance Exam for Kyushu University Graduate School of Engineering, Civil Engineering. Multiple subjects, Japanese/English.",
     status: "exam",
+    href: "https://eng.kyushu-u.ac.jp/en/admissions/graduate-admissions",
   },
   {
     date: "Oct 2027",
     title: "Start Master's 🎉",
     detail: "Enroll in a master's program — whether Osaka U, Nagoya U, Tohoku U, or Kyushu U. Two years of research begin.",
     status: "milestone",
+    href: "https://www.kyushu-u.ac.jp/en/admission/entrance/",
   },
 ];
 
@@ -284,24 +358,28 @@ const scholarshipOptions = [
     amount: "¥143,000–145,000/mo + full tuition",
     deadline: "Via Kyushu U internal selection (~Spring 2027)",
     note: "University nominates outstanding students to MEXT. Prof. Hazarika could recommend. Full coverage.",
+    href: "https://www.mext.go.jp/en/policy/education/highered/title02/detail02/sdetail02/1347960.htm",
   },
   {
     name: "JASSO Honors Scholarship",
     amount: "¥48,000/mo",
     deadline: "After enrollment (auto-eligible if GPA ≥ 3.0)",
     note: "For privately financed international students already in Japan. Application through the university.",
+    href: "https://www.jasso.go.jp/en/study_j/scholarships/",
   },
   {
     name: "Kyushu University International Student Scholarship",
     amount: "Tuition waiver (50–100%)",
     deadline: "After enrollment",
     note: "University-specific aid. Already received this during undergrad — strong track record.",
+    href: "https://www.isc.kyushu-u.ac.jp/intlweb/en/scholarship",
   },
   {
     name: "ADB-Japan Scholarship Program",
     amount: "Full tuition + monthly stipend + housing + travel",
     deadline: "~Nov–Dec 2026 (varies by university)",
     note: "Funds students from ADB developing member countries (Indonesia ✓) at participating universities including Kyushu U.",
+    href: "https://www.adb.org/what-we-do/adb-japan-scholarship-program",
   },
 ];
 
@@ -314,6 +392,7 @@ const visaOptions = [
     cost: "Tuition ~¥35,000/mo (cheaper than master's ¥535,800/yr)",
     note: "Smooth change-of-status from undergrad Student visa. Keeps you in Fukuoka, in the lab, and legally resident.",
     active: true,
+    href: "https://www.moj.go.jp/isa/applications/status/16.html",
   },
   {
     name: "Designated Activities (Job Hunting) Visa",
@@ -323,6 +402,7 @@ const visaOptions = [
     cost: "No tuition (not enrolled)",
     note: "Fallback if NO program is secured by Nov 2026. Apply at Fukuoka Immigration Bureau before current visa expires.",
     active: false,
+    href: "https://www.moj.go.jp/isa/applications/status/51.html",
   },
   {
     name: "J-Find (Future Creation Talent) Visa",
@@ -332,6 +412,7 @@ const visaOptions = [
     cost: "No tuition",
     note: "For graduates of distinguished universities. Kyushu U qualifies. Longer than the standard job-hunting visa.",
     active: false,
+    href: "https://www.moj.go.jp/isa/applications/status/j-find.html",
   },
 ];
 
@@ -434,9 +515,9 @@ export default function MastersPlanPage() {
               <Card className="mt-6">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <p className="font-heading font-bold uppercase tracking-wide text-lg text-ink">
+                    <LinkableTitle href="https://hyoka.ofc.kyushu-u.ac.jp/html/100020032_en.html">
                       Prof. Hazarika Hemanta
-                    </p>
+                    </LinkableTitle>
                     <p className="label text-accent mt-1">
                       Geodisaster Prevention Lab · Civil Engineering
                     </p>
@@ -518,10 +599,16 @@ export default function MastersPlanPage() {
             <section className="mt-16">
               <SectionLabel index="03 / Research">The Research Direction</SectionLabel>
               <Card>
-                <p className="font-heading font-bold text-ink uppercase tracking-wide">
+                <a
+                  href={safeHref("https://www.isgs.kyushu-u.ac.jp/en/")}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group font-heading font-bold text-ink uppercase tracking-wide hover:text-accent transition-colors inline-flex items-center gap-1.5"
+                >
                   Economic Policy Evaluation of Residential Energy Retrofit Incentives
                   in Developing Economies
-                </p>
+                  <span aria-hidden className="text-accent text-sm transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
+                </a>
                 <p className="mt-2 text-sm text-muted">
                   A Microeconomic Analysis of Indonesia's Type 36 Housing Policy Framework
                 </p>
@@ -571,9 +658,9 @@ export default function MastersPlanPage() {
                     <Card className="hover:border-line-strong transition-colors duration-200">
                       <div className="flex items-start justify-between gap-4">
                         <div>
-                          <p className="font-heading font-bold uppercase tracking-wide text-lg text-ink">
+                          <LinkableTitle href={opt.href}>
                             {opt.name}
-                          </p>
+                          </LinkableTitle>
                           <p className="label text-accent mt-1">{opt.program}</p>
                         </div>
                         <span className="font-mono text-xs text-faint shrink-0">
@@ -640,9 +727,9 @@ export default function MastersPlanPage() {
                             {opt.rank}
                           </span>
                           <div>
-                            <p className="font-heading font-bold uppercase tracking-wide text-lg text-ink">
+                            <LinkableTitle href={opt.href}>
                               {opt.name}
-                            </p>
+                            </LinkableTitle>
                             <p className="label text-accent mt-1">{opt.program}</p>
                           </div>
                         </div>
@@ -708,7 +795,9 @@ export default function MastersPlanPage() {
                   <Reveal key={sch.name} delay={i * 0.03}>
                     <div className="border-l-2 border-line hover:border-accent transition-colors duration-200 pl-4 py-2">
                       <div className="flex items-start justify-between gap-4">
-                        <p className="font-medium text-ink">{sch.name}</p>
+                        <LinkableHeading href={sch.href}>
+                          {sch.name}
+                        </LinkableHeading>
                         <span className="font-mono text-xs text-accent shrink-0 text-right">
                           {sch.amount}
                         </span>
@@ -738,7 +827,9 @@ export default function MastersPlanPage() {
                     >
                       <div className="flex items-start justify-between gap-4">
                         <div>
-                          <p className="font-medium text-ink">{v.name}</p>
+                          <LinkableHeading href={v.href}>
+                            {v.name}
+                          </LinkableHeading>
                           <p className="label text-accent mt-1">{v.type}</p>
                         </div>
                         {v.active && <Tag>Primary</Tag>}
@@ -788,15 +879,13 @@ export default function MastersPlanPage() {
                           }`}
                         />
                         <p
-                          className={`label tabular-nums ${
-                            statusColors[item.status]
-                          }`}
+                          className={`label tabular-nums ${statusColors[item.status]}`}
                         >
                           {item.date}
                         </p>
-                        <p className="mt-1 font-medium text-ink">
+                        <LinkableHeading href={item.href} className="mt-1">
                           {item.title}
-                        </p>
+                        </LinkableHeading>
                         <p className="mt-1 text-sm text-muted leading-relaxed">
                           {item.detail}
                         </p>
