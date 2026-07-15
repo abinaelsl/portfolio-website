@@ -132,6 +132,8 @@ const profileStats = [
   { label: "Graduation", value: "Oct 2026" },
   { label: "GPA", value: "3.21 / 4.0" },
   { label: "TOEFL iBT", value: "110" },
+  { label: "GMAT", value: "585 (Focused Edition, Apr 2026)" },
+  { label: "GRE", value: "310 (157Q · 153V)" },
   { label: "Japanese", value: "Near-N1 (4 yr)" },
   { label: "Research", value: "Energy retrofit policy" },
 ];
