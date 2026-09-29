@@ -29,27 +29,31 @@ const mono = JetBrains_Mono({
 });
 
 const SITE_DESCRIPTION =
-  "Student at Kyushu University. Startup founder at StatusMaxx. Researching net-zero buildings.";
+  "Research student in geotechnical engineering and geo-disaster prevention at Kyushu University. I model things, build things, and check whether they hold up.";
+
+const SITE_TITLE =
+  "Abinael Sarungallo Lumempouw — Geotechnical engineering research, Kyushu University";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://abinael.xyz"),
   title: {
-    default: "Abinael Sarungallo Lumempouw",
+    default: SITE_TITLE,
     template: "%s · Abinael S.L.",
   },
   description: SITE_DESCRIPTION,
   keywords: [
     "Abinael Sarungallo Lumempouw",
     "Kyushu University",
-    "StatusMaxx",
+    "geotechnical engineering",
+    "geo-disaster prevention",
+    "earthquake engineering",
+    "Status Maxx",
     "net zero buildings",
-    "building energy research",
-    "founder",
   ],
   authors: [{ name: "Abinael Sarungallo Lumempouw" }],
   alternates: { canonical: "/" },
   openGraph: {
-    title: "Abinael Sarungallo Lumempouw",
+    title: SITE_TITLE,
     description: SITE_DESCRIPTION,
     url: "/",
     siteName: "Abinael S.L.",
@@ -57,7 +61,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Abinael Sarungallo Lumempouw",
+    title: SITE_TITLE,
     description: SITE_DESCRIPTION,
   },
 };

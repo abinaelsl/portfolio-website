@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Abinael Sarungallo Lumempouw — Kyushu University · StatusMaxx · net-zero buildings";
+export const alt = "Abinael Sarungallo Lumempouw — Geotechnical engineering research, Kyushu University";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -68,7 +68,7 @@ export default function OpengraphImage() {
         </div>
 
         <div style={{ display: "flex", gap: 14 }}>
-          {["Kyushu University", "StatusMaxx", "Net-Zero Buildings"].map((tag) => (
+          {["Kyushu University", "Geotechnical Engineering", "Geo-Disaster Prevention"].map((tag) => (
             <div
               key={tag}
               style={{

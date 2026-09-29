@@ -118,6 +118,7 @@ export default async function ProjectPage({
             ))}
           </div>
 
+          {project.stack.length > 0 && (
           <Reveal>
             <div className="mt-10 border-t border-line pt-8">
               <p className="label text-faint mb-3">Stack</p>
@@ -133,6 +134,7 @@ export default async function ProjectPage({
               </div>
             </div>
           </Reveal>
+          )}
 
           <Reveal>
             <div className="mt-12 border-t border-line pt-8 flex items-center justify-between gap-4">

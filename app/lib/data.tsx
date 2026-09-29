@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import postsData from "@/app/content/posts.json";
 import projectsData from "@/app/content/projects.json";
 import researchData from "@/app/content/research.json";
+import experienceData from "@/app/content/experience.json";
 import siteData from "@/app/content/site.json";
 
 // ── Social links ──────────────────────────────────────────────────────────────
@@ -90,7 +91,8 @@ export type Paper = {
   title: string;
   authors: string;
   venue: string;
-  href: string;
+  href: string; // "" when there's nothing to link to yet
+  description?: string;
   tags: string[];
 };
 
@@ -104,6 +106,7 @@ export type Project = {
   tagline: string;
   description: string;
   href: string;
+  writing?: string; // internal write-up (e.g. /writing/slug)
   tags: string[];
   year: string;
   role: string;
@@ -119,6 +122,18 @@ export const projects: Project[] = projectsData as Project[];
 export function getProject(slug: string): Project | undefined {
   return projects.find((p) => p.slug === slug);
 }
+
+// ── Experience ──────────────────────────────────────────────────────────────────
+export type ExperienceItem = {
+  role: string;
+  org?: string;
+  date?: string;
+  detail?: string;
+  link?: { label: string; href: string };
+};
+export type ExperienceGroup = { group: string; items: ExperienceItem[] };
+
+export const experience: ExperienceGroup[] = experienceData as ExperienceGroup[];
 
 // ── Content channels ────────────────────────────────────────────────────────────
 export type Channel = {

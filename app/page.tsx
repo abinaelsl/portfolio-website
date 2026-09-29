@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
-import { research, projects, channels, posts, formatDate, avatarPath } from "@/app/lib/data";
+import { research, experience, projects, channels, posts, formatDate, avatarPath } from "@/app/lib/data";
 import { safeHref } from "@/app/lib/safe-href";
 import { Reveal, Stagger, StaggerItem } from "@/app/lib/motion";
 import { SiteNav } from "@/app/components/site-nav";
@@ -78,12 +78,11 @@ function Hero() {
             </StaggerItem>
             <StaggerItem>
               <p className="mt-4 text-base sm:text-lg text-muted leading-relaxed">
-                Student at{" "}
-                <span className="text-ink font-medium">Kyushu University</span>{" "}
-                · Founder of{" "}
-                <span className="text-accent font-medium">StatusMaxx</span>{" "}
-                · Researching{" "}
-                <span className="text-ink font-medium">net-zero buildings</span>.
+                <span className="text-ink font-medium">Research Student, Geotechnical Engineering</span>{" "}
+                · <span className="text-accent font-medium">Kyushu University</span>
+              </p>
+              <p className="mt-1.5 text-sm sm:text-base text-muted leading-relaxed">
+                I model things, build things, and check whether they hold up.
               </p>
             </StaggerItem>
             <StaggerItem>
@@ -102,26 +101,43 @@ function About() {
     <section id="about" className="max-w-3xl mx-auto px-6 py-12 border-t border-line">
       <Reveal>
         <SectionLabel index="01 / About">About</SectionLabel>
-        <p className="text-muted leading-relaxed text-base">
-          Currently a 4th-year undergraduate at Kyushu University, where my research focuses on
-          sustainable building design and energy-efficient systems. Specifically, I investigate
-          pathways to net-zero carbon emissions in residential buildings, with an emphasis on
-          mass-market deployment through affordable housing typologies. I am supervised by{" "}
-          <span className="text-ink font-medium">Professor Hazarika Hemanta</span>{" "}
-          and{" "}
-          <span className="text-ink font-medium">Professor Hironobu Kan</span>,
-          and am a member of the{" "}
-          <span className="text-ink font-medium">Geodisaster Prevention Lab</span>{" "}
-          in the Faculty of Civil Engineering.
-        </p>
-        <p className="mt-4 text-muted leading-relaxed text-base">
-          Outside academia, I founded{" "}
-          <span className="text-accent font-medium">StatusMaxx</span> — a
-          fintech app that helps users find the best membership card to use at any given merchant,
-          with proximity-based promo discovery built in. We&apos;re on a roadmap to launch in July
-          2026. I also create content on YouTube, Instagram, and TikTok covering life in Japan, tech,
-          startups, university life, and personal finance.
-        </p>
+        <div className="space-y-4 text-muted leading-relaxed text-base">
+          <p>
+            I&apos;m Abinael, an Indonesian engineer-in-training living in Fukuoka since 2022.
+          </p>
+          <p>
+            I&apos;m a research student in{" "}
+            <span className="text-ink font-medium">Prof. Hazarika Hemanta</span>&apos;s{" "}
+            <span className="text-ink font-medium">Geo-Disaster Prevention Global Lab</span> at
+            Kyushu University, where I also serve as lab student leader. I&apos;m studying
+            geomechanics and the geotechnical methods that keep infrastructure standing through
+            earthquakes. When the M7.1 Kumamoto earthquake struck in July 2026, my professor went out
+            to investigate the sections of expressway that had subsided. That&apos;s the kind of work
+            I&apos;m here to learn, and Indonesia sits on the same Ring of Fire.
+          </p>
+          <p>
+            Before that, my degree project (B.Sc., School of Interdisciplinary Science and Innovation,
+            2026, supervised by{" "}
+            <span className="text-ink font-medium">Prof. Hazarika Hemanta</span> and{" "}
+            <span className="text-ink font-medium">Prof. Hironobu Kan</span>) asked how
+            Indonesia&apos;s 36 m² &ldquo;Type 36&rdquo; house could get close to net-zero on a
+            homeowner&apos;s budget. The answer turned out to be roof and wall insulation that pays for
+            itself in about a year.
+          </p>
+          <p>
+            I&apos;ve also spent three years teaching: as a TA for Prof. Jan Brezina&apos;s Math for
+            ISI, for Prof. Hazarika&apos;s Geotechnical Disaster Prevention and Sustainability course,
+            and in the Faculty of Science&apos;s English conversation programme.
+          </p>
+          <p>
+            I like building as much as modelling:{" "}
+            <span className="text-accent font-medium">Status Maxx</span>, a fintech app I coded
+            myself; an offline AI assistant running on a local LLM; and the other experiments below.
+            Outside the lab I work in HR at J-PRO NET Cooperative, placing Indonesian and Filipino
+            workers with Japanese companies, and I help manage my family&apos;s investments back home.
+          </p>
+          <p>I work in Japanese, Bahasa Indonesia and English.</p>
+        </div>
       </Reveal>
     </section>
   );
@@ -137,20 +153,16 @@ function Research() {
       <div className="space-y-6">
         {research.map((p, i) => {
           const external = p.href.startsWith("http");
-          return (
-          <Reveal key={p.title} delay={i * 0.06}>
-            <a
-              href={safeHref(p.href)}
-              {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-              className="group block pl-4 border-l-2 border-line
-                         hover:border-accent transition-colors duration-200
-                         rounded-r-md focus-visible:outline-none"
-            >
+          const body = (
+            <>
               <p className="font-medium text-ink group-hover:text-accent transition-colors leading-snug">
                 {p.title}
               </p>
               <p className="mt-1 text-sm text-muted">{p.authors}</p>
               <p className="font-mono text-xs text-faint mt-0.5">{p.venue}</p>
+              {p.description && (
+                <p className="mt-2 text-sm text-muted leading-relaxed">{p.description}</p>
+              )}
               <div className="mt-2 flex flex-wrap gap-1.5">
                 {p.tags.map((t) => (
                   <span key={t} className="font-mono text-[11px] px-2 py-0.5 rounded border border-accent/30 text-accent">
@@ -158,10 +170,75 @@ function Research() {
                   </span>
                 ))}
               </div>
-            </a>
+            </>
+          );
+          return (
+          <Reveal key={p.title} delay={i * 0.06}>
+            {p.href ? (
+              <a
+                href={safeHref(p.href)}
+                {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                className="group block pl-4 border-l-2 border-line
+                           hover:border-accent transition-colors duration-200
+                           rounded-r-md focus-visible:outline-none"
+              >
+                {body}
+              </a>
+            ) : (
+              <div className="pl-4 border-l-2 border-line">{body}</div>
+            )}
           </Reveal>
         );
         })}
+      </div>
+    </section>
+  );
+}
+
+// ── Experience ──────────────────────────────────────────────────────────────────
+function Experience() {
+  return (
+    <section id="experience" className="max-w-3xl mx-auto px-6 py-12 border-t border-line">
+      <Reveal>
+        <SectionLabel index="03 / Teaching">Teaching &amp; Experience</SectionLabel>
+      </Reveal>
+      <div className="space-y-10">
+        {experience.map((g) => (
+          <div key={g.group}>
+            <Reveal>
+              <h3 className="label text-faint mb-4">{g.group}</h3>
+            </Reveal>
+            <div className="space-y-5">
+              {g.items.map((e, i) => (
+                <Reveal key={e.role + (e.date ?? "")} delay={i * 0.04}>
+                  <div className="pl-4 border-l-2 border-line">
+                    <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-0.5 sm:gap-4">
+                      <p className="font-medium text-ink leading-snug">{e.role}</p>
+                      {e.date && (
+                        <p className="font-mono text-xs text-faint shrink-0 tabular-nums">{e.date}</p>
+                      )}
+                    </div>
+                    {e.org && <p className="mt-1 text-sm text-muted">{e.org}</p>}
+                    {e.detail && (
+                      <p className="mt-1.5 text-sm text-muted leading-relaxed">{e.detail}</p>
+                    )}
+                    {e.link && (
+                      <a
+                        href={safeHref(e.link.href)}
+                        {...(e.link.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                        className="label mt-2 inline-flex items-center gap-1 text-accent hover:opacity-80
+                                   transition-opacity rounded-md focus-visible:outline-none"
+                      >
+                        {e.link.label}
+                        <span aria-hidden>{e.link.href.startsWith("http") ? "↗" : "→"}</span>
+                      </a>
+                    )}
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );
@@ -173,7 +250,7 @@ function Projects() {
   return (
     <section id="projects" className="max-w-3xl mx-auto px-6 py-12 border-t border-line">
       <Reveal>
-        <SectionLabel index="03 / Projects">Projects</SectionLabel>
+        <SectionLabel index="04 / Projects">Projects</SectionLabel>
       </Reveal>
       <div className="space-y-5">
         {projects.map((p, i) => (
@@ -218,12 +295,12 @@ function Projects() {
                   ))}
                 </div>
                 <Link
-                  href={`/projects/${p.slug}`}
+                  href={p.writing ?? `/projects/${p.slug}`}
                   className="label shrink-0 inline-flex items-center gap-1
                              text-muted hover:text-accent transition-colors
                              rounded-md focus-visible:outline-none"
                 >
-                  Case study
+                  {p.writing ? "Write-up" : "Case study"}
                   <span aria-hidden className="transition-transform duration-200 group-hover:translate-x-0.5">→</span>
                 </Link>
               </div>
@@ -283,7 +360,7 @@ function Content() {
   return (
     <section className="max-w-3xl mx-auto px-6 py-12 border-t border-line">
       <Reveal>
-        <SectionLabel index="04 / Channels">Content</SectionLabel>
+        <SectionLabel index="05 / Channels">Content</SectionLabel>
       </Reveal>
       <div className="grid sm:grid-cols-3 gap-4">
         {channels.map((c, i) => (
@@ -347,6 +424,7 @@ export default function Home() {
         <Hero />
         <About />
         <Research />
+        <Experience />
         <Projects />
         <Writing />
         <Content />

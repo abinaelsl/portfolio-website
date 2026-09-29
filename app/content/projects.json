@@ -1,5 +1,42 @@
 [
   {
+    "slug": "statusmaxx",
+    "name": "Status Maxx",
+    "tagline": "QREC Idea Challenge 2026 winner · live at statusmaxx.xyz",
+    "description": "A credit card and loyalty-perk discovery app: tell it what you hold and it shows the promotions you're actually eligible for. I built the first version, site and prototype, myself.",
+    "href": "https://statusmaxx.xyz",
+    "tags": [
+      "React Native",
+      "Expo",
+      "Supabase"
+    ],
+    "year": "2025 — present",
+    "role": "Founder",
+    "status": "Live",
+    "image": "/projects/ig-post1-announce.png",
+    "overview": "Most people carry several cards but rarely know which one gives the best perk at the merchant in front of them. Status Maxx closes that gap: it matches live card promotions to the cards a user actually holds, with proximity-based discovery so the right offer surfaces at the right place.",
+    "highlights": [
+      {
+        "label": "Problem",
+        "detail": "Card perks are scattered across issuer pages and change constantly — value is left on the table because nobody tracks them per-merchant."
+      },
+      {
+        "label": "Approach",
+        "detail": "A daily Python pipeline extracts and structures promotions, which are matched against each user's wallet and surfaced by proximity to nearby merchants."
+      },
+      {
+        "label": "Recognition",
+        "detail": "Winner of the QREC Idea Challenge 2026 (Kyushu University)."
+      }
+    ],
+    "stack": [
+      "Expo",
+      "React Native",
+      "Python",
+      "Supabase"
+    ]
+  },
+  {
     "slug": "offline-personal-assistant",
     "name": "Offline Personal Assistant (Hermes)",
     "tagline": "Hermes Agent running on a personal PC with a local LLM (qwen3.5:9b).",
@@ -41,80 +78,25 @@
     ]
   },
   {
-    "slug": "statusmaxx",
-    "name": "StatusMaxx",
-    "tagline": "QREC grant winner · applying for YC Fall 2026.",
-    "description": "StatusMaxx helps users discover credit card promotions matched to their wallet. Winner of the Kyushu University QREC entrepreneurship fund grant. Built with Expo/React Native (iOS & Android), a Python pipeline for daily promo extraction, and Supabase as the backend.",
-    "href": "https://statusmaxx.xyz",
+    "slug": "self-learning-trading-agent",
+    "name": "Self-Learning Trading Agent",
+    "tagline": "Independent",
+    "description": "I taught my AI assistant to run trading experiments 24/7 — change one variable, backtest, compare scores, keep or revert. Here's how the system works and what it's learned so far.",
+    "href": "https://github.com/abinaelsl/trading-agent",
+    "writing": "/writing/self-learning-trading-agent",
     "tags": [
-      "React Native",
-      "Expo",
-      "Supabase",
-      "QREC Grant",
-      "YC F26"
+      "quantitative finance",
+      "algorithmic trading",
+      "backtesting",
+      "automated experimentation"
     ],
-    "year": "2025 — present",
-    "role": "Founder",
-    "status": "Building · YC F26 applicant",
-    "image": "/projects/ig-post1-announce.png",
-    "overview": "Most people carry several cards but rarely know which one gives the best perk at the merchant in front of them. StatusMaxx closes that gap: it matches live card promotions to the cards a user actually holds, with proximity-based discovery so the right offer surfaces at the right place.",
-    "highlights": [
-      {
-        "label": "Problem",
-        "detail": "Card perks are scattered across issuer pages and change constantly — value is left on the table because nobody tracks them per-merchant."
-      },
-      {
-        "label": "Approach",
-        "detail": "A daily Python pipeline extracts and structures promotions, which are matched against each user's wallet and surfaced by proximity to nearby merchants."
-      },
-      {
-        "label": "Recognition",
-        "detail": "Winner of the Kyushu University QREC entrepreneurship fund grant; currently applying for Y Combinator Fall 2026."
-      }
-    ],
-    "stack": [
-      "Expo",
-      "React Native",
-      "Python",
-      "Supabase"
-    ]
-  },
-  {
-    "slug": "sarungallo-holdings",
-    "name": "Sarungallo Holdings",
-    "tagline": "Tracking a $3.5M family-office investment fund across four asset classes.",
-    "description": "A self-hosted dashboard for a $3.5 million family-office fund spanning real estate, equities, gold, and crypto — valued in USD or IDR. Live price refresh writes timestamped snapshots so value-over-time graphs accumulate automatically. Features allocation donut, sector breakdown, top movers, and per-asset detail pages. Built with Next.js and Supabase.",
-    "href": "https://sarungalloholdings.vercel.app",
-    "tags": [
-      "Next.js",
-      "Supabase",
-      "Finance",
-      "IDR / USD"
-    ],
-    "year": "2025",
-    "role": "Designer & engineer",
-    "status": "Live · private",
-    "image": "/projects/screenshot-2026-06-22-at-13-29-59.png",
-    "overview": "A self-hosted command center for a $3.5M family-office fund spread across real estate, equities, gold, and crypto. Every refresh writes a timestamped snapshot, so performance history accumulates on its own rather than depending on a third-party broker view.",
-    "highlights": [
-      {
-        "label": "Four asset classes, one view",
-        "detail": "Real estate, equities, gold, and crypto valued together in either USD or IDR, with an allocation donut and sector breakdown."
-      },
-      {
-        "label": "History that builds itself",
-        "detail": "Live price refresh writes timestamped snapshots, so value-over-time graphs accumulate automatically without manual logging."
-      },
-      {
-        "label": "Drill-down detail",
-        "detail": "Top movers on the dashboard, plus per-asset detail pages for position-level context."
-      }
-    ],
-    "stack": [
-      "Next.js",
-      "Supabase",
-      "TypeScript"
-    ]
+    "year": "2026",
+    "role": "Independent",
+    "status": "Experiment",
+    "image": "",
+    "overview": "Automated strategy optimization via a scientific experiment loop: pick a strategy, change one parameter, split into train/validation, backtest both, compare scores, keep or revert, log, repeat.",
+    "highlights": [],
+    "stack": []
   },
   {
     "slug": "fintrack",
@@ -156,6 +138,43 @@
       "Supabase",
       "Gemma (local)",
       "LM Studio"
+    ]
+  },
+  {
+    "slug": "sarungallo-holdings",
+    "name": "Family-office portfolio dashboard",
+    "tagline": "Private family-office tool",
+    "description": "A private dashboard for my family's investment office: allocation, sector breakdown and valuation history across asset classes. Private; no figures shown.",
+    "href": "#",
+    "tags": [
+      "Next.js",
+      "Supabase",
+      "Finance",
+      "IDR / USD"
+    ],
+    "year": "2025",
+    "role": "Designer & engineer",
+    "status": "Private",
+    "image": "",
+    "overview": "A private dashboard for my family's investment office: allocation, sector breakdown and valuation history across asset classes. Every refresh writes a timestamped snapshot, so performance history accumulates on its own rather than depending on a third-party broker view.",
+    "highlights": [
+      {
+        "label": "Four asset classes, one view",
+        "detail": "Real estate, equities, gold, and crypto valued together in either USD or IDR, with an allocation donut and sector breakdown."
+      },
+      {
+        "label": "History that builds itself",
+        "detail": "Live price refresh writes timestamped snapshots, so value-over-time graphs accumulate automatically without manual logging."
+      },
+      {
+        "label": "Drill-down detail",
+        "detail": "Top movers on the dashboard, plus per-asset detail pages for position-level context."
+      }
+    ],
+    "stack": [
+      "Next.js",
+      "Supabase",
+      "TypeScript"
     ]
   }
 ]

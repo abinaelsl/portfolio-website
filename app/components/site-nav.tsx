@@ -8,6 +8,7 @@ import { IconSaturn } from "./orbital";
 const sections = [
   { id: "about", label: "About" },
   { id: "research", label: "Research" },
+  { id: "experience", label: "Experience" },
   { id: "projects", label: "Projects" },
   { id: "writing", label: "Writing" },
 ];
@@ -41,7 +42,7 @@ export function SiteNav() {
       <div className="max-w-3xl mx-auto px-6 h-14 flex items-center justify-between gap-2">
         <a
           href="#top"
-          className="group inline-flex items-center gap-2 rounded-md focus-visible:outline-none"
+          className="group shrink-0 inline-flex items-center gap-2 rounded-md focus-visible:outline-none"
         >
           <IconSaturn className="h-4 w-4 text-accent transition-transform group-hover:rotate-12" />
           <span className="font-heading text-sm font-extrabold uppercase tracking-[0.18em] text-ink">
@@ -49,8 +50,8 @@ export function SiteNav() {
           </span>
           <span className="font-mono text-[10px] tracking-wider text-accent hidden sm:inline">@abinaelsl</span>
         </a>
-        <div className="flex items-center gap-0.5 sm:gap-1">
-          <nav className="flex items-center">
+        <div className="min-w-0 flex items-center gap-0.5 sm:gap-1">
+          <nav className="min-w-0 flex items-center overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {sections.map((s) => {
               const isActive = active === s.id;
               return (
@@ -58,7 +59,7 @@ export function SiteNav() {
                   key={s.id}
                   href={`#${s.id}`}
                   aria-current={isActive ? "true" : undefined}
-                  className="label relative px-2 sm:px-3 py-2 rounded-md transition-colors
+                  className="label relative shrink-0 px-2 sm:px-3 py-2 rounded-md transition-colors
                              text-muted hover:text-ink
                              focus-visible:outline-none"
                 >
@@ -76,7 +77,7 @@ export function SiteNav() {
               );
             })}
           </nav>
-          <div className="pl-1">
+          <div className="pl-1 shrink-0">
             <ThemeToggle />
           </div>
         </div>

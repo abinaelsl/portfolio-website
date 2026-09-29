@@ -17,7 +17,7 @@ portfolio-website/
 │   ├── projects/           # Project detail pages
 │   ├── components/         # Nav, footer, orbital, theme toggle, etc.
 │   └── content/
-│       ├── projects.json   # 4 projects (StatusMaxx, Sarungallo, FinTrack, Hermes)
+│       ├── projects.json   # 4 projects (Status Maxx, family-office dashboard, FinTrack, Hermes)
 │       ├── posts.json      # Writing entries
 │       └── research.json   # 1 publikasi (Net Zero House)
 └── lib/                    # Data utilities + motion variants

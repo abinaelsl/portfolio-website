@@ -1,5 +1,29 @@
 [
   {
+    "title": "Earthquake Geotechnics & Geo-Disaster Prevention",
+    "authors": "Abinael Sarungallo Lumempouw",
+    "venue": "2026– · In progress",
+    "href": "",
+    "description": "Research student project in Prof. Hazarika Hemanta's Geo-Disaster Prevention Global Lab, Kyushu University. My focus is geomechanics: how the ground responds to strong shaking, and which geotechnical methods keep roads, slopes and buildings standing. The M7.1 Kumamoto earthquake of 28 July 2026 made this concrete; Prof. Hazarika went into the field to investigate the expressway damage and subsidence. No results yet; this is where I'm starting.",
+    "tags": [
+      "Geomechanics",
+      "Earthquake engineering",
+      "Disaster prevention"
+    ]
+  },
+  {
+    "title": "The Net-Zero House Starter Kit: Retrofitting the Indonesian Type 36 “Starter Home” for Energy Efficiency",
+    "authors": "Abinael Sarungallo Lumempouw",
+    "venue": "B.Sc. degree project, Kyushu University · 2026",
+    "href": "https://www.researchgate.net/publication/406981225_Abinael_Type_36_House_Paper_Final",
+    "tags": [
+      "Net Zero",
+      "Building Retrofit",
+      "Energy Efficiency",
+      "Tropical Climate"
+    ]
+  },
+  {
     "title": "REPS — Residential Retrofit Policy Simulator",
     "authors": "Abinael Sarungallo Lumempouw",
     "venue": "Policy decision-support prototype · Kyushu University · 2026",
@@ -10,30 +34,6 @@
       "Type 36",
       "Energy Efficiency",
       "Equity"
-    ]
-  },
-  {
-    "title": "The Net-Zero House Starter Kit: Retrofitting the Indonesian Type 36 “Starter Home” for Energy Efficiency",
-    "authors": "Abinael Sarungallo Lumempouw",
-    "venue": "Final Degree Project, Kyushu University · 2026",
-    "href": "https://www.researchgate.net/publication/406981225_Abinael_Type_36_House_Paper_Final",
-    "tags": [
-      "Net Zero",
-      "Building Retrofit",
-      "Energy Efficiency",
-      "Tropical Climate"
-    ]
-  },
-  {
-    "title": "Self-Learning Trading Agent: Automated Strategy Optimization via Scientific Experiment Loop",
-    "authors": "Abinael Sarungallo Lumempouw",
-    "venue": "Independent Research",
-    "href": "https://github.com/abinaelsl/trading-agent",
-    "tags": [
-      "quantitative finance",
-      "algorithmic trading",
-      "backtesting",
-      "automated experimentation"
     ]
   }
 ]

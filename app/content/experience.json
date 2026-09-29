@@ -1,0 +1,85 @@
+[
+  {
+    "group": "Research & Teaching",
+    "items": [
+      {
+        "role": "Research Student, Geotechnical Engineering",
+        "org": "Geo-Disaster Prevention Global Lab (Prof. Hazarika Hemanta), Kyushu University",
+        "date": "Sep 2026 – present",
+        "detail": "Lab Student Leader: appointed by Prof. Hazarika to help lead the lab and handle the administrative procedures research requires."
+      },
+      {
+        "role": "Teaching Assistant, Geotechnical Disaster Prevention and Sustainability",
+        "org": "Prof. Hazarika Hemanta, Kyushu University",
+        "date": "Apr 2026 – present",
+        "detail": "Grading and classroom management."
+      },
+      {
+        "role": "Teaching Assistant, Math for ISI",
+        "org": "Prof. Jan Brezina, School of Interdisciplinary Science and Innovation, Kyushu University",
+        "date": "Dec 2024 – Feb 2025 and Nov 2025 – Feb 2026",
+        "detail": "Linear algebra, calculus and Python for maths: checking quizzes, tests and homework, and supporting students."
+      },
+      {
+        "role": "Teaching Assistant, Science English Conversation Course",
+        "org": "Faculty of Science, Kyushu University",
+        "date": "Oct 2023 – present",
+        "link": {
+          "label": "Faculty of Science TA list",
+          "href": "https://www.sci.kyushu-u.ac.jp/international/etraining_talist.html"
+        }
+      },
+      {
+        "role": "Visiting Researcher",
+        "org": "Pukyong National University, Busan",
+        "date": "Feb – Mar 2026"
+      },
+      {
+        "role": "Undergraduate Lab Member",
+        "org": "Geo-Disaster Prevention Global Lab, Kyushu University",
+        "date": "Aug 2024 – Sep 2026"
+      }
+    ]
+  },
+  {
+    "group": "Work",
+    "items": [
+      {
+        "role": "HR Specialist",
+        "org": "J-PRO NET Cooperative, Fukuoka",
+        "date": "Mar 2026 – present",
+        "detail": "Indonesian desk at a supervising organisation for technical interns and Specified Skilled Workers: placements, welfare and compliance visits, and translation of embassy correspondence. Wrote trilingual (JP/ID/EN) client guides to the technical intern → Specified Skilled Worker → Ikusei Shuro transition."
+      },
+      {
+        "role": "Founder",
+        "org": "Status Maxx",
+        "date": "Feb 2026 – present",
+        "link": {
+          "label": "Project",
+          "href": "/projects/statusmaxx"
+        }
+      }
+    ]
+  },
+  {
+    "group": "Education & Honours",
+    "items": [
+      {
+        "role": "B.Sc., Interdisciplinary Science and Innovation",
+        "org": "Kyushu University",
+        "date": "2022 – 2026"
+      },
+      {
+        "role": "MEXT SGU Scholarship · Kyushu University International Undergraduate Scholarship"
+      },
+      {
+        "role": "Winner, QREC Idea Challenge 2026",
+        "org": "Kyushu University"
+      },
+      {
+        "role": "Languages",
+        "org": "Japanese, Bahasa Indonesia, English (TOEFL iBT 110)"
+      }
+    ]
+  }
+]
